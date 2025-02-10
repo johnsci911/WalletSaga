@@ -102,13 +102,25 @@
                                 </tr>
                             @endforeach
                         @endif
-                        <tr>
-                            <th colspan="4" class="px-4 py-2 text-right font-light">Page {{ $entries['current_page'] }} Balance:</th>
-                            <th class="px-4 py-2 text-right border-l border-r border-gray-400">{{ $currentPageBalace }}</th>
+                        <tr class="border-t border-black">
+                            <th colspan="4" class="px-4 py-2 text-right font-light text-green-500 bg-white">Total Earnings:</th>
+                            <th class="px-4 py-2 text-right border-l border-r text-green-500 border-gray-400 bg-white">{{ $totalEarnings }}</th>
+                            <th class="bg-white"></th>
                         </tr>
                         <tr>
-                            <th colspan="4" class="px-4 py-2 text-right font-light">Total Balance:</th>
-                            <th class="px-4 py-2 text-right border-l border-r border-gray-400">{{ $totalBalance }}</th>
+                            <th colspan="4" class="px-4 py-2 text-right font-light text-red-500 bg-white">Total Expenses:</th>
+                            <th class="px-4 py-2 text-right border-l border-r text-red-500 border-gray-400 bg-white">{{ $totalExpenses }}</th>
+                            <th class="bg-white"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="px-4 py-2 text-right font-light text-white bg-blue-300">Page {{ $entries['current_page'] }} Total Balance:</th>
+                            <th class="px-4 py-2 text-right border-l border-r text-white border-white bg-blue-300">{{ $currentPageBalace }}</th>
+                            <th class="text-white bg-blue-300"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="px-4 py-2 text-right font-light text-white bg-blue-400 rounded-bl-xl">All Pages Total Balance:</th>
+                            <th class="px-4 py-2 text-right border-l border-r text-white border-white bg-blue-400">{{ $totalBalance }}</th>
+                            <th class="bg-blue-400 rounded-br-xl"></th>
                         </tr>
                     </tbody>
                 </table>

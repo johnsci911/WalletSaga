@@ -21,6 +21,8 @@ class Dashboard extends Component
     public $entries = [];
     public $currentPageBalace = 0;
     public $totalBalance = 0;
+    public $totalEarnings = 0;
+    public $totalExpenses = 0;
     public $earningForm = [
         'date'        => '',
         'amount'      => '',
@@ -53,6 +55,8 @@ class Dashboard extends Component
         $this->expenseCategories = ExpenseCategory::all()->toArray();
         $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings     = $this->getTotalEarnings();
+        $this->totalExpenses     = $this->getTotalExpenses();
     }
 
     public function getAllEntries()
@@ -80,6 +84,16 @@ class Dashboard extends Component
         });
 
         return $entries;
+    }
+
+    public function getTotalEarnings()
+    {
+        return Earning::where('user_id', Auth::id())->sum('amount');
+    }
+
+    public function getTotalExpenses()
+    {
+        return Expense::where('user_id', Auth::id())->sum('amount');
     }
 
     public function getPaginatedEntries()
@@ -124,9 +138,11 @@ class Dashboard extends Component
             return $entry;
         })->toArray();
 
-        return array_sum(array_map(function ($entry) {
+        $total = array_sum(array_map(function ($entry) {
             return $entry['type'] == 'Earning' ? $entry['amount'] : -$entry['amount'];
         }, $allEntries));
+
+        return number_format($total, 2);
     }
 
     public function submitEarning()
