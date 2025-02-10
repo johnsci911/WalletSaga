@@ -160,6 +160,7 @@ class Dashboard extends Component
         $this->entries = $this->getAllEntries()->toArray();
         $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings     = $this->getTotalEarnings();
         $this->gotoPage(1);
 
         $this->reset('earningForm');
@@ -180,6 +181,7 @@ class Dashboard extends Component
         $this->entries = $this->getAllEntries()->toArray();
         $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalExpenses     = $this->getTotalExpenses();
         $this->gotoPage(1);
 
         $this->reset('expenseForm');
