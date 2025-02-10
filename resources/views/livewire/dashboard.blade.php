@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center max-w-7xl mx-auto py-6 mt-20">
-    <h1 class="text-3xl font-bold text-blue-600 text-center">Expense Tracker</h1>
+    <h1 class="text-3xl font-bold text-blue-400 text-center">Expense Tracker</h1>
 
     <div class="flex flex-row mt-4 sticky top-0">
         <!-- Earning and Expense Forms -->
@@ -114,14 +114,14 @@
                 </table>
 
                 @if(isset($entries['links']))
-                    <div class="mt-4">
+                    <div class="mt-4 p-2 bg-slate-300 rounded-xl">
                         @foreach($entries['links'] as $link)
                             @php
                                 $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
                             @endphp
                             <button
                                 wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
-                                class="px-4 py-2 border rounded {{ $link['active'] ? 'bg-blue-500 text-white' : 'text-blue-500' }}"
+                                class="px-4 py-2 rounded {{ $link['active'] ? 'font-bold bg-blue-400 text-white' : 'font-light bg-slate-50 text-slate-400' }}"
                                 {{ $link['url'] ? '' : 'disabled' }}
                             >
                                 {!! $link['label'] !!}
