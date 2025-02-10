@@ -1,4 +1,4 @@
-<nav class="bg-white shadow">
+<nav class="bg-white shadow fixed w-full z-20 top-0 start-0">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="relative flex items-center h-16 w-full">
             <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">

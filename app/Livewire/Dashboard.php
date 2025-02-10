@@ -19,6 +19,7 @@ class Dashboard extends Component
     protected $queryString = ['page'];
 
     public $entries = [];
+    public $currentPageBalace = 0;
     public $totalBalance = 0;
     public $earningForm = [
         'date'        => '',
@@ -47,9 +48,10 @@ class Dashboard extends Component
     {
         $this->page = request()->query('page', 1);
 
-        $this->entries        = $this->getAllEntries()->toArray();
+        $this->entries           = $this->getPaginatedEntries()->toArray();
         $this->earningCategories = EarningCategory::all()->toArray();
         $this->expenseCategories = ExpenseCategory::all()->toArray();
+        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
     }
 
@@ -77,6 +79,13 @@ class Dashboard extends Component
             return $entry;
         });
 
+        return $entries;
+    }
+
+    public function getPaginatedEntries()
+    {
+        $entries = $this->getAllEntries();
+
         $perPage = 10;
         $page = (int) $this->page ?? 1;
 
@@ -94,7 +103,8 @@ class Dashboard extends Component
     public function gotoPage($page)
     {
         $this->page = $page;
-        $entries = $this->getAllEntries();
+
+        $entries = $this->getPaginatedEntries();
 
         if ($entries instanceof LengthAwarePaginator) {
             $this->entries = $entries->toArray();
@@ -102,7 +112,7 @@ class Dashboard extends Component
             $this->entries = [];
         }
 
-        $this->totalBalance = $this->calculateTotalBalance($entries);
+        $this->currentPageBalace = $this->calculateTotalBalance($entries);
     }
 
     public function calculateTotalBalance($entries)
@@ -132,7 +142,8 @@ class Dashboard extends Component
         ]);
 
         $this->entries = $this->getAllEntries()->toArray();
-        $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
+        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
         $this->gotoPage(1);
 
         $this->reset('earningForm');
@@ -151,7 +162,8 @@ class Dashboard extends Component
         ]);
 
         $this->entries = $this->getAllEntries()->toArray();
-        $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
+        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
         $this->gotoPage(1);
 
         $this->reset('expenseForm');
@@ -165,7 +177,8 @@ class Dashboard extends Component
             Expense::where('id', $id)->delete();
         }
 
-        $this->entries   = $this->getAllEntries()->toArray();
-        $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
+        $this->entries           = $this->getPaginatedEntries()->toArray();
+        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
     }
 }
