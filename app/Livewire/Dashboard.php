@@ -198,5 +198,7 @@ class Dashboard extends Component
         $this->entries           = $this->getPaginatedEntries()->toArray();
         $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings     = $this->getTotalEarnings();
+        $this->totalExpenses     = $this->getTotalExpenses();
     }
 }
