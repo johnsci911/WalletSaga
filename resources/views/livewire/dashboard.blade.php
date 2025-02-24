@@ -1,10 +1,10 @@
-<div class="flex flex-col items-center max-w-7xl mx-auto py-6 mt-20">
-    <h1 class="text-3xl font-bold text-blue-400 text-center">Expense Tracker</h1>
+<div class="flex flex-col items-center px-4 py-6 mx-auto mt-20 max-w-7xl lg:px-0">
+    <h1 class="text-3xl font-bold text-center text-blue-400">Expense Tracker</h1>
 
-    <div class="flex flex-row mt-4 sticky top-0">
+    <div class="flex flex-col mt-4 w-full lg:flex-row">
         <!-- Earning and Expense Forms -->
-        <div class="flex flex-col w-2/5 justify-between space-y-4 p-4 bg-slate-200 rounded-xl mr-4">
-            <form wire:submit.prevent="submitEarning" class="flex flex-col bg-slate-50 p-4 rounded-xl w-full space-y-4">
+        <div class="flex lg:sticky lg:top-24 flex-col justify-start self-start p-4 mb-4 space-y-4 w-full rounded-xl lg:w-2/5 bg-slate-200 lg:mb-0 lg:mr-4">
+            <form wire:submit.prevent="submitEarning" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-50">
                 <p class="text-lg font-bold text-green-500">Earning</p>
                 <div>
                     <label class="text-gray-600 font-bold">Date:</label>
@@ -61,72 +61,75 @@
             </form>
         </div>
 
-        <div class="p-4 bg-slate-200 rounded-xl">
-            <div class="sticky top-24 flex flex-col items-center">
-                <!-- Budget Table -->
-                <table class="w-full border-collapse table-auto zebra rounded-lg bg-slate-300">
-                    <style>
-                        .expense-row {
-                            background-color: #f2dede;
-                        }
-                        .income-row {
-                            background-color: #dff0d8;
-                        }
-                    </style>
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-left">Date Time</th>
-                            <th class="px-4 py-2 text-left">Type</th>
-                            <th class="px-4 py-2 text-left">Category</th>
-                            <th class="px-4 py-2 text-left">Description</th>
-                            <th class="px-4 py-2 text-right">Amount</th>
-                            <th class="px-4 py-2 text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(count($entries) == 0)
+        <div class="p-4 w-full rounded-xl lg:w-3/5 bg-slate-200">
+            <div class="flex sticky top-24 flex-col items-center min-w-full">
+                <!-- Scrollable container for table and links -->
+                <div class="overflow-x-auto w-full">
+                    <!-- Budget Table -->
+                    <table class="w-full rounded-lg border-collapse table-auto zebra bg-slate-300">
+                        <style>
+                            .expense-row {
+                                background-color: #f2dede;
+                            }
+                            .income-row {
+                                background-color: #dff0d8;
+                            }
+                        </style>
+                        <thead>
                             <tr>
-                                <td colspan="6" class="px-4 py-2 text-center bg-white">No entries found.</td>
+                                <th class="px-4 py-2 text-left">Date Time</th>
+                                <th class="px-4 py-2 text-left">Type</th>
+                                <th class="px-4 py-2 text-left">Category</th>
+                                <th class="px-4 py-2 text-left">Description</th>
+                                <th class="px-4 py-2 text-right">Amount</th>
+                                <th class="px-4 py-2 text-right">Action</th>
                             </tr>
-                        @else
-                            @foreach($entries['data'] as $entry)
-                                <tr class="{{ $entry['type'] == 'Expense' ? 'expense-row' : 'income-row' }}">
-                                    <td class="px-4 py-2">{{ $entry['date'] }}</td>
-                                    <td class="px-4 py-2 {{ $entry['type'] == 'Expense' ? 'text-red-600' : 'text-green-600' }}">{{ $entry['type'] }}</td>
-                                    <td class="px-4 py-2 order-gray-400 font-bold">{{ $entry['category'] }}</td>
-                                    <td class="px-4 py-2">{{ $entry['description'] }}</td>
-                                    <td class="px-4 py-2 border-l border-r border-gray-400 text-right">{{ $entry['amount'] }}</td>
-                                    <td class="px-4 py-2 text-right">
-                                        <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-red-500 text-white rounded p-2">Delete</button>
-                                    </td>
+                        </thead>
+                        <tbody>
+                            @if(count($entries) == 0)
+                                <tr>
+                                    <td colspan="6" class="px-4 py-2 text-center bg-white">No entries found.</td>
                                 </tr>
-                            @endforeach
-                        @endif
-                        <tr class="border-t border-black">
-                            <th colspan="4" class="px-4 py-2 text-right font-light text-green-500 bg-white">Total Earnings:</th>
-                            <th class="px-4 py-2 text-right border-l border-r text-green-500 border-gray-400 bg-white">{{ $totalEarnings }}</th>
-                            <th class="bg-white"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="px-4 py-2 text-right font-light text-red-500 bg-white">Total Expenses:</th>
-                            <th class="px-4 py-2 text-right border-l border-r text-red-500 border-gray-400 bg-white">{{ $totalExpenses }}</th>
-                            <th class="bg-white"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="px-4 py-2 text-right font-light text-white bg-blue-300">Page {{ $entries['current_page'] }} Total Balance:</th>
-                            <th class="px-4 py-2 text-right border-l border-r text-white border-white bg-blue-300">{{ $currentPageBalace }}</th>
-                            <th class="text-white bg-blue-300"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="4" class="px-4 py-2 text-right font-light text-white bg-blue-400 rounded-bl-xl">All Pages Total Balance:</th>
-                            <th class="px-4 py-2 text-right border-l border-r text-white border-white bg-blue-400">{{ $totalBalance }}</th>
-                            <th class="bg-blue-400 rounded-br-xl"></th>
-                        </tr>
-                    </tbody>
-                </table>
+                            @else
+                                @foreach($entries['data'] as $entry)
+                                    <tr class="{{ $entry['type'] == 'Expense' ? 'expense-row' : 'income-row' }}">
+                                        <td class="px-4 py-2">{{ $entry['date'] }}</td>
+                                        <td class="px-4 py-2 {{ $entry['type'] == 'Expense' ? 'text-red-600' : 'text-green-600' }}">{{ $entry['type'] }}</td>
+                                        <td class="px-4 py-2 font-bold order-gray-400">{{ $entry['category'] }}</td>
+                                        <td class="px-4 py-2">{{ $entry['description'] }}</td>
+                                        <td class="px-4 py-2 text-right border-r border-l border-gray-400">{{ $entry['amount'] }}</td>
+                                        <td class="px-4 py-2 text-right">
+                                            <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="p-2 text-white bg-red-500 rounded">Delete</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            <tr class="border-t border-black">
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-green-500 bg-white">Total Earnings:</th>
+                                <th class="px-4 py-2 text-right text-green-500 bg-white border-r border-l border-gray-400">{{ $totalEarnings }}</th>
+                                <th class="bg-white"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-red-500 bg-white">Total Expenses:</th>
+                                <th class="px-4 py-2 text-right text-red-500 bg-white border-r border-l border-gray-400">{{ $totalExpenses }}</th>
+                                <th class="bg-white"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-blue-300">Page {{ $entries['current_page'] }} Total Balance:</th>
+                                <th class="px-4 py-2 text-right text-white bg-blue-300 border-r border-l border-white">{{ $currentPageBalace }}</th>
+                                <th class="text-white bg-blue-300"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-blue-400 rounded-bl-xl">All Pages Total Balance:</th>
+                                <th class="px-4 py-2 text-right text-white bg-blue-400 border-r border-l border-white">{{ $totalBalance }}</th>
+                                <th class="bg-blue-400 rounded-br-xl"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 @if(isset($entries['links']))
-                    <div class="mt-4 p-2 bg-slate-300 rounded-xl">
+                    <div class="overflow-x-auto p-2 mt-4 w-full whitespace-nowrap rounded-xl bg-slate-300">
                         @foreach($entries['links'] as $link)
                             @php
                                 $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
