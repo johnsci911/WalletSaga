@@ -64,7 +64,7 @@
         <div class="p-4 w-full rounded-2xl lg:w-3/5 bg-slate-200">
             <div class="flex sticky top-24 flex-col items-center min-w-full">
                 <!-- Scrollable container for table and links -->
-                <div class="{{ count($entries['data']) != 0 ? 'overflow-x-scroll w-full' : 'w-full' }} rounded-xl">
+                <div class="overflow-x-scroll w-full rounded-xl">
                     <!-- Budget Table -->
                     <table class="w-full min-w-max border-collapse table-auto bg-slate-300 font-fantasque text-sm">
                         <style>
