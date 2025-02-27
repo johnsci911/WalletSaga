@@ -85,7 +85,7 @@
                         <tbody>
                             @if(count($entries['data']) == 0)
                                 <tr>
-                                    <td colspan="6" class="px-4 py-8 text-left md:text-center bg-slate-600 text-2xl font-bold text-slate-200">No entries found.</td>
+                                    <td colspan="6" class="px-4 py-8 text-left md:text-center text-2xl font-bold text-slate-200">No entries found.</td>
                                 </tr>
                             @else
                                 @foreach($entries['data'] as $entry)
