@@ -66,19 +66,19 @@
                 <!-- Scrollable container for table and links -->
                 <div class="overflow-x-auto w-full rounded-t-xl scrollbar-thin">
                     <!-- Budget Table -->
-                    <table class="w-full min-w-max border-collapse table-auto bg-slate-950 font-fantasque text-sm">
+                    <table class="w-full min-w-max border-collapse table-auto bg-slate-950 font-fantasque text-sm rounded-t-xl">
                         <style>
                             .zebra-row:nth-child(even) {
                                 background-color: rgba(203, 213, 225, 0.08);
                             }
                         </style>
-                        <thead class="bg-slate-800 text-gray-50">
+                        <thead class="bg-slate-800 text-slate-50">
                             <tr>
                                 <th class="px-4 py-2 text-left">Date Time</th>
                                 <th class="px-4 py-2 text-left">Type</th>
                                 <th class="px-4 py-2 text-left">Category</th>
                                 <th class="px-4 py-2 text-left">Description</th>
-                                <th class="px-4 py-2 text-right">Amount</th>
+                                <th class="px-4 py-2 text-right border-l border-r">Amount</th>
                                 <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
@@ -92,9 +92,9 @@
                                     <tr class="zebra-row text-slate-300 {{ $entry['type'] == 'Expense' ? 'expense-row' : 'income-row' }}">
                                         <td class="font-bold px-4 py-2">{{ $entry['date'] }}</td>
                                         <td class="font-bold px-4 py-2 {{ $entry['type'] == 'Expense' ? 'text-red-600' : 'text-green-600' }}">{{ $entry['type'] }}</td>
-                                        <td class="font-bold px-4 py-2 font-bold order-gray-400">{{ $entry['category'] }}</td>
+                                        <td class="font-bold px-4 py-2 order-gray-400">{{ $entry['category'] }}</td>
                                         <td class="font-bold px-4 py-2">{{ $entry['description'] }}</td>
-                                        <td class="font-bold px-4 py-2 text-right border-r border-l border-gray-400 {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
+                                        <td class="font-bold px-4 py-2 text-right border-r border-l {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
                                         <td class="font-bold px-4 py-2">
                                             <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="p-2 text-slate-100 bg-red-600 rounded-xl">Delete</button>
                                         </td>
@@ -113,12 +113,12 @@
                             </tr>
                             <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-900">Page {{ $entries['current_page'] }} Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-white bg-slate-900 border-r border-l">{{ $currentPageBalance }}</th>
+                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900 border-r border-l">{{ $currentPageBalance }}</th>
                                 <th class="bg-slate-900"></th>
                             </tr>
                             <tr>
-                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-900">All Pages Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-white bg-slate-900 border-r border-l">{{ $totalBalance }}</th>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-slate-300 bg-slate-900">All Pages Total Balance:</th>
+                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900 border-r border-l">{{ $totalBalance }}</th>
                                 <th class="bg-slate-900"></th>
                             </tr>
                         </tbody>
