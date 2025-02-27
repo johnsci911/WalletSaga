@@ -47,10 +47,10 @@
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="sm:hidden" id="mobile-menu" x-show="open" x-cloak>
         <div class="px-2 pt-2 pb-3 space-y-1">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-slate-700 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Home</a>
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'bg-slate-700 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-slate-800 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Home</a>
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'bg-slate-800 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
             @if (Auth::check())
-                <a href="{{ route('profile.show') }}" class="text-slate-300 hover:bg-slate-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile Settings</a>
+                <a href="{{ route('profile.show') }}" class="text-slate-300 hover:bg-slate-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile Settings</a>
                 <form action="{{ route('logout') }}" method="POST" class="block">
                     @csrf
                     <button type="submit" class="text-red-600 hover:text-red-400 hover:bg-slate-800 block w-full text-left px-3 py-2 rounded-md text-base font-medium">Logout</button>
