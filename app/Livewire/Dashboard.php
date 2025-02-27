@@ -19,7 +19,7 @@ class Dashboard extends Component
     protected $queryString = ['page'];
 
     public $entries = [];
-    public $currentPageBalace = 0;
+    public $currentPageBalance = 0;
     public $totalBalance = 0;
     public $totalEarnings = 0;
     public $totalExpenses = 0;
@@ -50,13 +50,13 @@ class Dashboard extends Component
     {
         $this->page = request()->query('page', 1);
 
-        $this->entries           = $this->getPaginatedEntries()->toArray();
-        $this->earningCategories = EarningCategory::all()->toArray();
-        $this->expenseCategories = ExpenseCategory::all()->toArray();
-        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
-        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
-        $this->totalEarnings     = $this->getTotalEarnings();
-        $this->totalExpenses     = $this->getTotalExpenses();
+        $this->entries            = $this->getPaginatedEntries()->toArray();
+        $this->earningCategories  = EarningCategory::all()->toArray();
+        $this->expenseCategories  = ExpenseCategory::all()->toArray();
+        $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->totalBalance       = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings      = $this->getTotalEarnings();
+        $this->totalExpenses      = $this->getTotalExpenses();
     }
 
     public function getAllEntries()
@@ -88,12 +88,12 @@ class Dashboard extends Component
 
     public function getTotalEarnings()
     {
-        return Earning::where('user_id', Auth::id())->sum('amount');
+        return number_format(Earning::where('user_id', Auth::id())->sum('amount'), 2);
     }
 
     public function getTotalExpenses()
     {
-        return Expense::where('user_id', Auth::id())->sum('amount');
+        return number_format(Expense::where('user_id', Auth::id())->sum('amount'), 2);
     }
 
     public function getPaginatedEntries()
@@ -126,7 +126,7 @@ class Dashboard extends Component
             $this->entries = [];
         }
 
-        $this->currentPageBalace = $this->calculateTotalBalance($entries);
+        $this->currentPageBalance = $this->calculateTotalBalance($entries);
     }
 
     public function calculateTotalBalance($entries)
@@ -158,7 +158,7 @@ class Dashboard extends Component
         ]);
 
         $this->entries = $this->getAllEntries()->toArray();
-        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
         $this->totalEarnings     = $this->getTotalEarnings();
         $this->gotoPage(1);
@@ -179,7 +179,7 @@ class Dashboard extends Component
         ]);
 
         $this->entries = $this->getAllEntries()->toArray();
-        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
         $this->totalExpenses     = $this->getTotalExpenses();
         $this->gotoPage(1);
@@ -196,7 +196,7 @@ class Dashboard extends Component
         }
 
         $this->entries           = $this->getPaginatedEntries()->toArray();
-        $this->currentPageBalace = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
         $this->totalEarnings     = $this->getTotalEarnings();
         $this->totalExpenses     = $this->getTotalExpenses();
