@@ -91,7 +91,7 @@
                         <tbody>
                             @if(count($entries['data']) == 0)
                                 <tr>
-                                    <td colspan="6" class="px-4 py-2 text-center bg-slate-700 text-2xl font-bold text-slate-300">No entries found.</td>
+                                    <td colspan="6" class="px-4 py-2 text-center bg-slate-900 text-2xl font-bold text-slate-300">No entries found.</td>
                                 </tr>
                             @else
                                 @foreach($entries['data'] as $entry)
@@ -109,23 +109,23 @@
                             @endif
                             <tr class="border-t border-black">
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-green-300 bg-slate-800">Total Earnings:</th>
-                                <th class="px-4 py-2 text-right text-green-300 bg-slate-800 border-r border-l border-gray-400">{{ $totalEarnings }}</th>
+                                <th class="px-4 py-2 text-right text-green-300 bg-slate-800 border-r border-l">{{ $totalEarnings }}</th>
                                 <th class="bg-slate-800"></th>
                             </tr>
                             <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-red-300 bg-slate-800">Total Expenses:</th>
-                                <th class="px-4 py-2 text-right text-red-300 bg-slate-800 border-r border-l border-gray-400">{{ $totalExpenses }}</th>
+                                <th class="px-4 py-2 text-right text-red-300 bg-slate-800 border-r border-l">{{ $totalExpenses }}</th>
                                 <th class="bg-slate-800"></th>
                             </tr>
                             <tr>
-                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-700">Page {{ $entries['current_page'] }} Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-white bg-slate-700 border-r border-l border-white">{{ $currentPageBalace }}</th>
-                                <th class="bg-slate-700"></th>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-900">Page {{ $entries['current_page'] }} Total Balance:</th>
+                                <th class="px-4 py-2 text-right text-white bg-slate-900 border-r border-l">{{ $currentPageBalace }}</th>
+                                <th class="bg-slate-900"></th>
                             </tr>
                             <tr>
-                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-700">All Pages Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-white bg-slate-700 border-r border-l border-white">{{ $totalBalance }}</th>
-                                <th class="bg-slate-700"></th>
+                                <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-900">All Pages Total Balance:</th>
+                                <th class="px-4 py-2 text-right text-white bg-slate-900 border-r border-l">{{ $totalBalance }}</th>
+                                <th class="bg-slate-900"></th>
                             </tr>
                         </tbody>
                     </table>
