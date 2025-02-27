@@ -53,7 +53,7 @@
                 <a href="{{ route('profile.show') }}" class="text-slate-300 hover:bg-slate-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile Settings</a>
                 <form action="{{ route('logout') }}" method="POST" class="block">
                     @csrf
-                    <button type="submit" class="text-red-600 hover:text-red-400 hover:bg-slate-800 block w-full text-left px-3 py-2 rounded-md text-base font-medium">Logout</button>
+                    <button type="submit" class="text-red-600 hover:text-red-400 hover:bg-slate-900 block w-full text-left px-3 py-2 rounded-md text-base font-medium">Logout</button>
                 </form>
             @else
                 <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-400 hover:bg-slate-800 block px-3 py-2 rounded-md text-base font-medium">Register</a>
