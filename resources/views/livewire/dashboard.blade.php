@@ -7,11 +7,17 @@
                 <p class="text-lg font-bold text-green-500">Earning</p>
                 <div>
                     <label class="text-slate-300 font-bold">Date:</label>
-                    <input type="datetime-local" wire:model="earningForm.date" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                    <div class="flex items-center space-x-2">
+                        <input type="datetime-local" wire:model="earningForm.date"
+                            class="border border-gray-200 bg-slate-200 rounded-xl p-2 flex-grow"
+                            required
+                            x-data="{}"
+                            x-init="if ($wire.shouldFocusDate && $wire.entryType === 'Earning') $el.focus()">
+                    </div>
                 </div>
                 <div>
                     <label class="text-slate-300 font-bold">Amount:</label>
-                    <input type="number" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                    <input type="decimal" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
                 </div>
                 <div>
                     <label class="text-slate-300 font-bold">Category:</label>
@@ -26,8 +32,15 @@
                     <textarea wire:model="earningForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
                 </div>
                 <div class="flex-grow"></div>
-                <div class="self-end">
-                    <button type="submit" class="bg-green-500 text-white font-extrabold rounded-xl p-2">Add Earning</button>
+                <div class="self-end flex space-x-2">
+                    @if($editingEntryId && $editingEntryType === 'Earning')
+                        <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                            Cancel
+                        </button>
+                    @endif
+                    <button type="submit" class="bg-green-500 text-white font-extrabold rounded-xl p-2">
+                        {{ $editingEntryId && $editingEntryType === 'Earning' ? 'Update Earning' : 'Add Earning' }}
+                    </button>
                 </div>
             </form>
 
@@ -35,11 +48,17 @@
                 <p class="text-lg font-bold text-red-500">Expense</p>
                 <div>
                     <label class="text-slate-300 font-bold">Date:</label>
-                    <input type="datetime-local" wire:model="expenseForm.date" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                    <div class="flex items-center space-x-2">
+                        <input type="datetime-local" wire:model="expenseForm.date"
+                            class="border border-gray-200 bg-slate-200 rounded-xl p-2 flex-grow"
+                            required
+                            x-data="{}"
+                            x-init="if ($wire.shouldFocusDate && $wire.entryType === 'Expense') $el.focus()">
+                    </div>
                 </div>
                 <div>
                     <label class="text-slate-300 font-bold">Amount:</label>
-                    <input type="number" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                    <input type="decimal" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
                 </div>
                 <div>
                     <label class="text-slate-300 font-bold">Category:</label>
@@ -54,8 +73,15 @@
                     <textarea wire:model="expenseForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
                 </div>
                 <div class="flex-grow"></div>
-                <div class="self-end">
-                    <button type="submit" class="bg-red-500 text-white font-extrabold rounded-xl p-2">Add Expense</button>
+                <div class="self-end flex space-x-2">
+                    @if($editingEntryId && $editingEntryType === 'Expense')
+                        <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                            Cancel
+                        </button>
+                    @endif
+                    <button type="submit" class="bg-red-500 text-white font-extrabold rounded-xl p-2">
+                        {{ $editingEntryId && $editingEntryType === 'Expense' ? 'Update Expense' : 'Add Expense' }}
+                    </button>
                 </div>
             </form>
         </div>
@@ -100,8 +126,9 @@
                                         <td class="font-bold px-4 py-2 order-gray-400">{{ $entry['category'] }}</td>
                                         <td class="font-bold px-4 py-2">{{ $entry['description'] }}</td>
                                         <td class="font-bold px-4 py-2 text-right border-r border-l {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
-                                        <td class="font-bold px-4 py-2">
-                                            <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="p-2 text-slate-100 bg-red-600 rounded-xl">Delete</button>
+                                        <td class="px-4 py-2 text-right">
+                                            <button wire:click="editEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-blue-500 text-white rounded p-2 mr-2">Edit</button>
+                                            <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-red-500 text-white rounded p-2">Delete</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -150,3 +177,4 @@
         </div>
     </div>
 </div>
+

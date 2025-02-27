@@ -7,6 +7,7 @@ use App\Models\EarningCategory;
 use App\Models\ExpenseCategory;
 use App\Models\Earning;
 use App\Models\Loan;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -24,6 +25,11 @@ class Dashboard extends Component
     public $totalBalance = 0;
     public $totalEarnings = 0;
     public $totalExpenses = 0;
+    public $earningCategories = [];
+    public $expenseCategories = [];
+    public $page;
+    public $editingEntryId = null;
+    public $editingEntryType = null;
     public $earningForm = [
         'date'        => '',
         'amount'      => '',
@@ -36,9 +42,6 @@ class Dashboard extends Component
         'category'    => 1,
         'description' => '',
     ];
-    public $earningCategories = [];
-    public $expenseCategories = [];
-    public $page;
 
     protected $listeners = ['submitEarning', 'submitExpense'];
 
@@ -58,12 +61,62 @@ class Dashboard extends Component
 
     public function updatedSearch()
     {
-        $this->resetPage();
+        $this->page = 1;
         $this->entries = $this->getPaginatedEntries()->toArray();
         $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
         $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
         $this->totalEarnings = $this->getTotalEarnings();
         $this->totalExpenses = $this->getTotalExpenses();
+    }
+
+    public function editEntry($id, $type)
+    {
+        $this->resetForms();
+
+        $this->editingEntryId = $id;
+        $this->editingEntryType = $type;
+
+        if ($type === 'Earning') {
+            $earning = Earning::findOrFail($id);
+            $this->earningForm = [
+                'date' => $this->formatDateForInput($earning->date),
+                'amount' => $earning->amount,
+                'category' => $earning->earning_categories_id,
+                'description' => $earning->description,
+            ];
+        } else {
+            $expense = Expense::findOrFail($id);
+            $this->expenseForm = [
+                'date' => $this->formatDateForInput($expense->date),
+                'amount' => $expense->amount,
+                'category' => $expense->expense_categories_id,
+                'description' => $expense->description,
+            ];
+        }
+    }
+
+    public function cancelEdit()
+    {
+        $this->editingEntryId = null;
+        $this->editingEntryType = null;
+        $this->resetForms();
+    }
+
+    private function resetForms()
+    {
+        $this->earningForm = [
+            'date' => '',
+            'amount' => '',
+            'category' => '',
+            'description' => '',
+        ];
+
+        $this->expenseForm = [
+            'date' => '',
+            'amount' => '',
+            'category' => '',
+            'description' => '',
+        ];
     }
 
     public function mount()
@@ -182,44 +235,90 @@ class Dashboard extends Component
 
     public function submitEarning()
     {
+        $currentPage = $this->page;
+
         $data = $this->earningForm;
 
-        Earning::create([
-            'date'                 => $data['date'],
-            'amount'               => $data['amount'],
-            'earning_categories_id' => $data['category'],
-            'description'          => $data['description'],
-            'user_id'              => Auth::id(),
-        ]);
+        if ($this->editingEntryId && $this->editingEntryType === 'Earning') {
+            $earning = Earning::findOrFail($this->editingEntryId);
 
-        $this->entries = $this->getAllEntries()->toArray();
+            $earning->update([
+                'date'                  => $data['date'],
+                'amount'                => $data['amount'],
+                'earning_categories_id' => $data['category'],
+                'description'           => $data['description'],
+            ]);
+
+            $this->editingEntryId = null;
+            $this->editingEntryType = null;
+
+            $this->page = $currentPage;
+        } else {
+            Earning::create([
+                'date'                  => $data['date'],
+                'amount'                => $data['amount'],
+                'earning_categories_id' => $data['category'],
+                'description'           => $data['description'],
+                'user_id'               => Auth::id(),
+            ]);
+
+            $currentPage = 1;
+        }
+
+        $this->entries            = $this->getAllEntries()->toArray();
         $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
-        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
-        $this->totalEarnings     = $this->getTotalEarnings();
-        $this->gotoPage(1);
+        $this->totalBalance       = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings      = $this->getTotalEarnings();
+        $this->gotoPage($currentPage);
 
         $this->reset('earningForm');
     }
 
     public function submitExpense()
     {
+        $currentPage = $this->page;
+
         $data = $this->expenseForm;
 
-        Expense::create([
-            'date'                  => $data['date'],
-            'amount'                => $data['amount'],
-            'expense_categories_id' => $data['category'],
-            'description'           => $data['description'],
-            'user_id'               => Auth::id(),
-        ]);
+        if ($this->editingEntryId && $this->editingEntryType === 'Expense') {
+            $expense = Expense::findOrFail($this->editingEntryId);
+            $expense->update([
+                'date'                  => $data['date'],
+                'amount'                => $data['amount'],
+                'expense_categories_id' => $data['category'],
+                'description'           => $data['description'],
+            ]);
+            $this->editingEntryId = null;
+            $this->editingEntryType = null;
+        } else {
+            Expense::create([
+                'date'                  => $data['date'],
+                'amount'                => $data['amount'],
+                'expense_categories_id' => $data['category'],
+                'description'           => $data['description'],
+                'user_id'               => Auth::id(),
+            ]);
 
-        $this->entries = $this->getAllEntries()->toArray();
+            $currentPage = 1;
+        }
+
+        $this->entries            = $this->getAllEntries()->toArray();
         $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
-        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
-        $this->totalExpenses     = $this->getTotalExpenses();
-        $this->gotoPage(1);
+        $this->totalBalance       = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalExpenses      = $this->getTotalExpenses();
+        $this->gotoPage($currentPage);
 
         $this->reset('expenseForm');
+    }
+
+    private function formatDateForDisplay($date)
+    {
+        return $date ? Carbon::parse($date)->format('m/d/Y, h:i:s A') : null;
+    }
+
+    private function formatDateForInput($date)
+    {
+        return $date ? Carbon::parse($date)->format('Y-m-d\TH:i') : null;
     }
 
     public function deleteEntry($id, $type)
@@ -230,10 +329,10 @@ class Dashboard extends Component
             Expense::where('id', $id)->delete();
         }
 
-        $this->entries           = $this->getPaginatedEntries()->toArray();
+        $this->entries            = $this->getPaginatedEntries()->toArray();
         $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
-        $this->totalBalance      = $this->calculateTotalBalance($this->getAllEntries());
-        $this->totalEarnings     = $this->getTotalEarnings();
-        $this->totalExpenses     = $this->getTotalExpenses();
+        $this->totalBalance       = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings      = $this->getTotalEarnings();
+        $this->totalExpenses      = $this->getTotalExpenses();
     }
 }
