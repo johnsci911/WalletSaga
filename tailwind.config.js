@@ -19,6 +19,27 @@ export default {
             },
         },
     },
-
-    plugins: [forms, typography],
+    plugins: [
+        forms,
+        typography,
+        function ({ addBase, theme }) {
+            addBase({
+                '.scrollbar-thin': {
+                    '&::-webkit-scrollbar': {
+                        width: '8px',
+                        height: '8px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: theme('colors.slate.900'),
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: theme('colors.slate.600'),
+                        borderRadius: '4px',
+                    },
+                    'scrollbar-width': 'thin',
+                    'scrollbar-color': `${theme('colors.slate.600')} ${theme('colors.slate.900')}`,
+                },
+            });
+        },
+    ],
 };

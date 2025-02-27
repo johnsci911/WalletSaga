@@ -17,7 +17,7 @@
         @livewireStyles
     </head>
 
-    <body class="bg-gray-100">
+    <body class="bg-slate-800">
         <x-navbar />
         <div class="container mx-auto">
             {{ $slot }}
