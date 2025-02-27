@@ -63,6 +63,11 @@
         <div class="p-4 w-full rounded-2xl lg:w-3/5 bg-slate-700">
             <p class="font-fantasque font-bold text-2xl text-slate-100 mb-4">Tracker</p>
             <div class="flex sticky top-24 flex-col items-center min-w-full">
+                <!-- Add search bar -->
+                <div class="w-full mb-4">
+                    <input type="text" wire:model.live.debounce.150ms="search" placeholder="Search entries..." class="w-full p-2 rounded-xl bg-slate-800 text-slate-100 border border-slate-600">
+                </div>
+
                 <!-- Scrollable container for table and links -->
                 <div class="overflow-x-auto w-full rounded-t-xl scrollbar-thin">
                     <!-- Budget Table -->

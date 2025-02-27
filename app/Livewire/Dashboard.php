@@ -18,6 +18,7 @@ class Dashboard extends Component
 
     protected $queryString = ['page'];
 
+    public $search = '';
     public $entries = [];
     public $currentPageBalance = 0;
     public $totalBalance = 0;
@@ -43,7 +44,26 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard',);
+        $entries = $this->getPaginatedEntries();
+
+        return view('livewire.dashboard', [
+            'entries' => $entries,
+            'currentPageBalance' => $this->calculateTotalBalance($entries),
+            'totalBalance' => $this->calculateTotalBalance($this->getAllEntries()),
+            'totalEarnings' => $this->getTotalEarnings(),
+            'totalExpenses' => $this->getTotalExpenses(),
+            'search' => $this->search,
+        ]);
+    }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+        $this->entries = $this->getPaginatedEntries()->toArray();
+        $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
+        $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings = $this->getTotalEarnings();
+        $this->totalExpenses = $this->getTotalExpenses();
     }
 
     public function mount()
@@ -61,14 +81,29 @@ class Dashboard extends Component
 
     public function getAllEntries()
     {
+        $search = '%' . $this->search . '%';
+        $searchLower = strtolower($this->search);
+
         $earnings = Earning::where('user_id', Auth::id())
             ->join('earning_categories', 'earnings.earning_categories_id', '=', 'earning_categories.id')
             ->select('earnings.id', 'earnings.date', 'earnings.amount', 'earnings.description', 'earning_categories.name as category_name')
+            ->where(function ($query) use ($search, $searchLower) {
+                $query->where('earnings.description', 'like', $search)
+                    ->orWhere('earnings.amount', 'like', $search)
+                    ->orWhere('earning_categories.name', 'like', $search)
+                    ->orWhereRaw('LOWER(?) LIKE ?', ['earning', $searchLower]);
+            })
             ->get();
 
         $expenses = Expense::where('user_id', Auth::id())
             ->join('expense_categories', 'expenses.expense_categories_id', '=', 'expense_categories.id')
             ->select('expenses.id', 'expenses.date', 'expenses.amount', 'expenses.description', 'expense_categories.name as category_name')
+            ->where(function ($query) use ($search, $searchLower) {
+                $query->where('expenses.description', 'like', $search)
+                    ->orWhere('expenses.amount', 'like', $search)
+                    ->orWhere('expense_categories.name', 'like', $search)
+                    ->orWhereRaw('LOWER(?) LIKE ?', ['expense', $searchLower]);
+            })
             ->get();
 
         $loans = Loan::where('user_id', Auth::id())->select('id', 'date', 'amount', 'user_id')->get();
