@@ -166,14 +166,14 @@
                 </div>
 
                 @if(isset($entries['links']))
-                    <div class="overflow-x-auto p-2 bg-slate-900 w-full whitespace-nowrap rounded-b-xl scrollbar-thin">
+                    <div class="overflow-x-auto p-4 bg-slate-900 w-full whitespace-nowrap rounded-b-2xl scrollbar-thin">
                         @foreach($entries['links'] as $link)
                             @php
                                 $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
                             @endphp
                             <button
                                 wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
-                                class="px-4 py-2 rounded {{ $link['active'] ? 'font-bold bg-slate-500 text-white' : 'font-light bg-slate-600 text-slate-400' }}"
+                                class="px-4 py-2 rounded-lg hover:text-white {{ $link['active'] ? 'font-bold bg-slate-700 text-white' : 'font-light bg-slate-800 text-slate-400' }}"
                                 {{ $link['url'] ? '' : 'disabled' }}
                             >
                                 {!! $link['label'] !!}
