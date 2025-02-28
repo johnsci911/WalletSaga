@@ -132,9 +132,11 @@
                                         <td class="font-bold px-4 py-2 order-gray-400">{{ $entry['category'] }}</td>
                                         <td class="font-bold px-4 py-2">{{ $entry['description'] }}</td>
                                         <td class="font-bold px-4 py-2 text-right border-r border-l {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
-                                        <td class="px-4 py-2 text-right">
-                                            <button wire:click="editEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-blue-500 text-white rounded p-2 mr-2">Edit</button>
-                                            <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-red-500 text-white rounded p-2">Delete</button>
+                                        <td class="p-4">
+                                            <div class="inline-flex">
+                                                <button wire:click="editEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-blue-500 text-white rounded-l-xl p-2 mr-1">Edit</button>
+                                                <button wire:click="deleteEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-red-500 text-white rounded-r-xl p-2">Delete</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
