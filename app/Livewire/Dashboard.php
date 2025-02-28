@@ -30,6 +30,7 @@ class Dashboard extends Component
     public $page;
     public $editingEntryId = null;
     public $editingEntryType = null;
+    public $shouldFocusDate = null;
     public $earningForm = [
         'date'        => '',
         'amount'      => '',
@@ -84,6 +85,8 @@ class Dashboard extends Component
                 'category' => $earning->earning_categories_id,
                 'description' => $earning->description,
             ];
+
+            $this->shouldFocusDate = 'earning';
         } else {
             $expense = Expense::findOrFail($id);
             $this->expenseForm = [
@@ -92,6 +95,8 @@ class Dashboard extends Component
                 'category' => $expense->expense_categories_id,
                 'description' => $expense->description,
             ];
+
+            $this->shouldFocusDate = 'expense';
         }
     }
 
@@ -104,6 +109,8 @@ class Dashboard extends Component
 
     private function resetForms()
     {
+        $this->shouldFocusDate = null;
+
         $this->earningForm = [
             'date' => '',
             'amount' => '',
