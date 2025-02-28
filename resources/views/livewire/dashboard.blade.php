@@ -184,3 +184,11 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('scrollToTop', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>
+

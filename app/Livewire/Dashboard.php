@@ -98,6 +98,8 @@ class Dashboard extends Component
 
             $this->shouldFocusDate = 'expense';
         }
+
+        $this->dispatch('scrollToTop');
     }
 
     public function cancelEdit()
