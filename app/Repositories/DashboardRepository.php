@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Loan;
 use App\Models\EarningCategory;
 use App\Models\ExpenseCategory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -64,25 +65,51 @@ class DashboardRepository
 
     public function createEarning($data)
     {
-        return Earning::create($data);
+        return Earning::create([
+            'user_id'               => Auth::id(),
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'amount'                => $data['amount'],
+            'earning_categories_id' => $data['category'],
+            'description'           => $data['description'],
+        ]);
     }
 
     public function updateEarning($id, $data)
     {
         $earning = Earning::findOrFail($id);
-        $earning->update($data);
+
+        $earning->update([
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'amount'                => $data['amount'],
+            'earning_categories_id' => $data['category'],
+            'description'           => $data['description'],
+        ]);
+
         return $earning;
     }
 
     public function createExpense($data)
     {
-        return Expense::create($data);
+        return Expense::create([
+            'user_id'               => Auth::id(),
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'amount'                => $data['amount'],
+            'expense_categories_id' => $data['category'],
+            'description'           => $data['description'],
+        ]);
     }
 
     public function updateExpense($id, $data)
     {
         $expense = Expense::findOrFail($id);
-        $expense->update($data);
+
+        $expense->update([
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'amount'                => $data['amount'],
+            'expense_categories_id' => $data['category'],
+            'description'           => $data['description'],
+        ]);
+
         return $expense;
     }
 
