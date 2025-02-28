@@ -143,28 +143,27 @@ class Dashboard extends Component
 
     public function getAllEntries()
     {
-        $search = '%' . $this->search . '%';
-        $searchLower = strtolower($this->search);
+        $search = '%' . strtolower($this->search) . '%';
 
         $earnings = Earning::where('user_id', Auth::id())
             ->join('earning_categories', 'earnings.earning_categories_id', '=', 'earning_categories.id')
             ->select('earnings.id', 'earnings.date', 'earnings.amount', 'earnings.description', 'earning_categories.name as category_name')
-            ->where(function ($query) use ($search, $searchLower) {
-                $query->where('earnings.description', 'like', $search)
-                    ->orWhere('earnings.amount', 'like', $search)
-                    ->orWhere('earning_categories.name', 'like', $search)
-                    ->orWhereRaw('LOWER(?) LIKE ?', ['earning', $searchLower]);
+            ->where(function ($query) use ($search) {
+                $query->whereRaw('LOWER(earnings.description) LIKE ?', $search)
+                    ->orWhereRaw('CAST(earnings.amount AS TEXT) LIKE ?', $search)
+                    ->orWhereRaw('LOWER(earning_categories.name) LIKE ?', $search)
+                    ->orWhereRaw('? LIKE ?', ['earning', $search]);
             })
             ->get();
 
         $expenses = Expense::where('user_id', Auth::id())
             ->join('expense_categories', 'expenses.expense_categories_id', '=', 'expense_categories.id')
             ->select('expenses.id', 'expenses.date', 'expenses.amount', 'expenses.description', 'expense_categories.name as category_name')
-            ->where(function ($query) use ($search, $searchLower) {
-                $query->where('expenses.description', 'like', $search)
-                    ->orWhere('expenses.amount', 'like', $search)
-                    ->orWhere('expense_categories.name', 'like', $search)
-                    ->orWhereRaw('LOWER(?) LIKE ?', ['expense', $searchLower]);
+            ->where(function ($query) use ($search) {
+                $query->whereRaw('LOWER(expenses.description) LIKE ?', $search)
+                    ->orWhereRaw('CAST(expenses.amount AS TEXT) LIKE ?', $search)
+                    ->orWhereRaw('LOWER(expense_categories.name) LIKE ?', $search)
+                    ->orWhereRaw('? LIKE ?', ['expense', $search]);
             })
             ->get();
 
