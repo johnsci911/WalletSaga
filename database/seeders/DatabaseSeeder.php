@@ -14,30 +14,59 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name'  => 'Test User',
-            'email' => 'test@example.com'
+            'name'  => 'John Karlo',
+            'email' => 'johnkarlo.315@gmail.com'
         ]);
 
-        $earningCategories = ['Salary', 'Bonus', 'Commission', 'Dividend', 'Interest', 'Other'];
+        $earningCategories = [
+            'Salary',
+            'Bonus',
+            'Commission',
+            'Dividend',
+            'Interest',
+            'Other'
+        ];
 
-        foreach ($earningCategories as $category) {
-            EarningCategory::factory()->create(['name' => $category])
-                ->each(function ($earningCategory) use ($user) {
+        $expenseCategories = [
+            'Groceries',
+            'Utilities',
+            'Transportation',
+            'Entertainment',
+            'Miscellaneous',
+            'Education',
+            'Healthcare',
+            'Personal Care',
+            'Home Improvement',
+            'Travel',
+            'Other'
+        ];
+
+        $dates = [];
+        $startDate = now()->startOfDay();
+        for ($day = 0; $day < 7; $day++) {
+            $entriesPerDay = rand(3, 5);
+            for ($entry = 0; $entry < $entriesPerDay; $entry++) {
+                $dates[] = $startDate->copy()->addDays($day)->addSeconds(rand(0, 86399))->timestamp;
+            }
+        }
+        sort($dates);
+
+
+        foreach ($dates as $date) {
+            EarningCategory::factory()->create(['name' => array_rand($earningCategories)])
+                ->each(function ($earningCategory) use ($user, $date) {
                     Earning::factory(3)->create([
                         'earning_categories_id' => $earningCategory->id,
-                        'user_id'               => $user->id
+                        'user_id'               => $user->id,
+                        'created_at'            => date('Y-m-d H:i:s', $date)
                     ]);
                 });
-        };
-
-        $expenseCategories = ['Groceries', 'Utilities', 'Transportation', 'Entertainment', 'Miscellaneous', 'Education', 'Healthcare', 'Personal Care', 'Home Improvement', 'Travel', 'Other'];
-
-        foreach ($expenseCategories as $category) {
-            ExpenseCategory::factory()->create(['name' => $category])
-                ->each(function ($earningCategory) use ($user) {
+            ExpenseCategory::factory()->create(['name' => array_rand($expenseCategories)])
+                ->each(function ($earningCategory) use ($user, $date) {
                     Expense::factory(1)->create([
                         'expense_categories_id' => $earningCategory->id,
-                        'user_id'               => $user->id
+                        'user_id'               => $user->id,
+                        'created_at'            => date('Y-m-d H:i:s', $date)
                     ]);
                 });
         }
