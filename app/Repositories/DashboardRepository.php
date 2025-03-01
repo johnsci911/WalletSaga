@@ -19,13 +19,13 @@ class DashboardRepository
 
         $earnings = $this->getEarnings($search);
         $expenses = $this->getExpenses($search);
-        $loans = $this->getLoans();
+        $loans    = $this->getLoans();
 
         return $earnings->concat($expenses)->concat($loans)->sortByDesc('date')->map(function ($entry) {
-            $entry->id = $entry->id;
-            $entry->date = \Carbon\Carbon::parse($entry->date)->format('Y-m-d H:i');
-            $entry->type = $entry instanceof Earning ? 'Earning' : 'Expense';
-            $entry->category = $entry->category_name ?? 'Loan';
+            $entry->id          = $entry->id;
+            $entry->date        = \Carbon\Carbon::parse($entry->date)->format('Y-m-d H:i');
+            $entry->type        = $entry instanceof Earning ? 'Earning' : 'Expense';
+            $entry->category    = $entry->category_name ?? 'Loan';
             $entry->description = $entry->description ?? '';
 
             return $entry;
@@ -42,7 +42,7 @@ class DashboardRepository
         return number_format(Expense::where('user_id', Auth::id())->sum('amount'), 2);
     }
 
-    public function getPaginatedEntries($entries, $page, $perPage = 10)
+    public function getPaginatedEntries($entries, $page, $perPage = 5)
     {
         return new LengthAwarePaginator(
             $entries->forPage($page, $perPage),
@@ -69,7 +69,7 @@ class DashboardRepository
             'user_id'               => Auth::id(),
             'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
             'amount'                => $data['amount'],
-            'earning_categories_id' => $data['category'],
+            'earning_categories_id' => $data['category'] != '' ? $data['category'] : 1,
             'description'           => $data['description'],
         ]);
     }
@@ -94,7 +94,7 @@ class DashboardRepository
             'user_id'               => Auth::id(),
             'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
             'amount'                => $data['amount'],
-            'expense_categories_id' => $data['category'],
+            'expense_categories_id' => $data['category'] != '' ? $data['category'] : 1,
             'description'           => $data['description'],
         ]);
     }

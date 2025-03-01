@@ -51,12 +51,12 @@ class Dashboard extends Component
         $entries = $this->getPaginatedEntries();
 
         return view('livewire.dashboard', [
-            'entries' => $entries,
+            'entries'            => $entries,
             'currentPageBalance' => $this->calculateTotalBalance($entries),
-            'totalBalance' => $this->calculateTotalBalance($this->getAllEntries()),
-            'totalEarnings' => $this->totalEarnings,
-            'totalExpenses' => $this->totalExpenses,
-            'search' => $this->search,
+            'totalBalance'       => $this->calculateTotalBalance($this->getAllEntries()),
+            'totalEarnings'      => $this->totalEarnings,
+            'totalExpenses'      => $this->totalExpenses,
+            'search'             => $this->search,
         ]);
     }
 
@@ -64,6 +64,27 @@ class Dashboard extends Component
     {
         $this->page = 1;
         $this->refreshData();
+    }
+
+    public function addEntry($type)
+    {
+        // Reset form first
+        $this->resetForms();
+
+        $this->editingEntryId   = null;
+        $this->editingEntryType = $type;
+        $this->shouldFocusDate  = $type;
+
+        $this->dispatch('scrollToBottom');
+    }
+
+    public function cancelAdd()
+    {
+        $this->resetForms();
+
+        $this->editingEntryType = null;
+
+        $this->dispatch('scrollToTop');
     }
 
     public function editEntry($id, $type)
@@ -76,9 +97,9 @@ class Dashboard extends Component
         if ($type === 'Earning') {
             $earning = $this->repository->getEarningById($id);
             $this->earningForm = [
-                'date' => $this->formatDateForInput($earning->date),
-                'amount' => $earning->amount,
-                'category' => $earning->earning_categories_id,
+                'date'        => $this->formatDateForInput($earning->date),
+                'amount'      => $earning->amount,
+                'category'    => $earning->earning_categories_id,
                 'description' => $earning->description,
             ];
 
@@ -86,16 +107,16 @@ class Dashboard extends Component
         } else {
             $expense = $this->repository->getExpenseById($id);
             $this->expenseForm = [
-                'date' => $this->formatDateForInput($expense->date),
-                'amount' => $expense->amount,
-                'category' => $expense->expense_categories_id,
+                'date'        => $this->formatDateForInput($expense->date),
+                'amount'      => $expense->amount,
+                'category'    => $expense->expense_categories_id,
                 'description' => $expense->description,
             ];
 
             $this->shouldFocusDate = 'expense';
         }
 
-        $this->dispatch('scrollToTop');
+        $this->dispatch('scrollToBottom');
     }
 
     public function cancelEdit()
@@ -103,6 +124,8 @@ class Dashboard extends Component
         $this->editingEntryId = null;
         $this->editingEntryType = null;
         $this->resetForms();
+
+        $this->dispatch('scrollToTop');
     }
 
     private function resetForms()
@@ -111,16 +134,16 @@ class Dashboard extends Component
         $this->editingEntryType = null;
 
         $this->earningForm = [
-            'date' => '',
-            'amount' => '',
-            'category' => '',
+            'date'        => '',
+            'amount'      => '',
+            'category'    => '',
             'description' => '',
         ];
 
         $this->expenseForm = [
-            'date' => '',
-            'amount' => '',
-            'category' => '',
+            'date'        => '',
+            'amount'      => '',
+            'category'    => '',
             'description' => '',
         ];
     }
@@ -133,13 +156,13 @@ class Dashboard extends Component
 
     private function refreshData()
     {
-        $this->entries = $this->getPaginatedEntries()->toArray();
-        $this->earningCategories = $this->repository->getEarningCategories();
-        $this->expenseCategories = $this->repository->getExpenseCategories();
+        $this->entries            = $this->getPaginatedEntries()->toArray();
+        $this->earningCategories  = $this->repository->getEarningCategories();
+        $this->expenseCategories  = $this->repository->getExpenseCategories();
         $this->currentPageBalance = $this->calculateTotalBalance($this->getPaginatedEntries());
-        $this->totalBalance = $this->calculateTotalBalance($this->getAllEntries());
-        $this->totalEarnings = $this->repository->getTotalEarnings();
-        $this->totalExpenses = $this->repository->getTotalExpenses();
+        $this->totalBalance       = $this->calculateTotalBalance($this->getAllEntries());
+        $this->totalEarnings      = $this->repository->getTotalEarnings();
+        $this->totalExpenses      = $this->repository->getTotalExpenses();
     }
 
     public function getAllEntries()
@@ -175,7 +198,7 @@ class Dashboard extends Component
 
         if ($this->editingEntryId && $this->editingEntryType === 'Earning') {
             $this->repository->updateEarning($this->editingEntryId, $data);
-            $this->editingEntryId = null;
+            $this->editingEntryId   = null;
             $this->editingEntryType = null;
         } else {
             $this->repository->createEarning($data);

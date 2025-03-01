@@ -1,100 +1,8 @@
 <div class="flex flex-col items-center px-4 py-6 mx-auto mt-20 max-w-7xl lg:px-0">
-    <div class="flex flex-col mt-4 w-full lg:flex-row">
-        <!-- Earning and Expense Forms -->
-        <div class="flex lg:sticky lg:top-24 flex-col justify-start self-start p-4 mb-4 space-y-4 w-full rounded-2xl lg:w-2/5 bg-slate-700 lg:mb-0 lg:mr-4">
-            <p class="font-fantasque font-bold text-2xl text-slate-100">Add Entries</p>
-            <div class="sticky top-24"
-                x-data="{ shouldFocus: @entangle('shouldFocusDate') }"
-                x-init="$watch('shouldFocus', value => {
-                     if (value === 'earning') {
-                         $nextTick(() => $refs.earningDateInput.focus());
-                     } else if (value === 'expense') {
-                         $nextTick(() => $refs.expenseDateInput.focus());
-                     }
-                })">
-                <div class="flex flex-col {{ $editingEntryType === null ? 'space-y-4' : '' }}">
-                    <!-- Earning Form -->
-                    <form wire:submit.prevent="submitEarning" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Expense' ? 'hidden' : '' }}">
-                        <p class="text-lg font-bold text-green-500">Earning</p>
-                        <div>
-                            <label class="text-slate-300 font-bold">Date:</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="datetime-local" wire:model="earningForm.date" x-ref="earningDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Amount:</label>
-                            <input type="decimal" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Category:</label>
-                            <select wire:model="earningForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                                @foreach($earningCategories as $category)
-                                    <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Description:</label>
-                            <textarea wire:model="earningForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
-                        </div>
-                        <div class="flex-grow"></div>
-                        <div class="self-end flex space-x-2">
-                            @if($editingEntryId && $editingEntryType === 'Earning')
-                                <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
-                                    Cancel Edit
-                                </button>
-                            @endif
-                            <button type="submit" class="bg-green-500 text-white font-extrabold rounded-xl p-2">
-                                {{ $editingEntryId && $editingEntryType === 'Earning' ? 'Update Earning' : 'Add Earning' }}
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Expense Form -->
-                    <form wire:submit.prevent="submitExpense" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Earning' ? 'hidden' : '' }}">
-                        <p class="text-lg font-bold text-red-500">Expense</p>
-                        <div>
-                            <label class="text-slate-300 font-bold">Date:</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="datetime-local" wire:model="expenseForm.date" x-ref="expenseDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Amount:</label>
-                            <input type="decimal" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Category:</label>
-                            <select wire:model="expenseForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                                @foreach($expenseCategories as $category)
-                                    <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-slate-300 font-bold">Description:</label>
-                            <textarea wire:model="expenseForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
-                        </div>
-                        <div class="flex-grow"></div>
-                        <div class="self-end flex space-x-2">
-                            @if($editingEntryId && $editingEntryType === 'Expense')
-                                <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
-                                    Cancel Edit
-                                </button>
-                            @endif
-                            <button type="submit" class="bg-red-500 text-white font-extrabold rounded-xl p-2">
-                                {{ $editingEntryId && $editingEntryType === 'Expense' ? 'Update Expense' : 'Add Expense' }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-4 w-full rounded-2xl lg:w-3/5 bg-slate-700">
-            <p class="font-fantasque font-bold text-2xl text-slate-100 mb-4">Tracker</p>
-            <div class="flex sticky top-24 flex-col items-center min-w-full">
+    <div class="flex flex-col mt-4 w-full space-y-4">
+        <div class="p-4 w-full rounded-2xl bg-slate-700">
+            <p class="font-bold text-2xl text-slate-100 mb-4 font-fantasque text-center">Tracker</p>
+            <div class="flex flex-col items-center min-w-full">
                 <!-- Add search bar -->
                 <div class="w-full mb-4">
                     <input type="text" wire:model.live.debounce.150ms="search" placeholder="Search entries..." class="w-full p-2 rounded-xl bg-slate-800 text-slate-100 border border-slate-600">
@@ -183,6 +91,120 @@
                 @endif
             </div>
         </div>
+
+        <!-- Earning and Expense Forms -->
+        <div class="flex flex-col justify-start self-start p-4 mb-4 space-y-4 w-full rounded-2xl bg-slate-700 lg:mb-0 lg:mr-4">
+            <div class="sticky top-24"
+                x-data="{ shouldFocus: @entangle('shouldFocusDate') }"
+                x-init="$watch('shouldFocus', value => {
+                     if (value === 'earning') {
+                         $nextTick(() => $refs.earningDateInput.focus());
+                     } else if (value === 'expense') {
+                         $nextTick(() => $refs.expenseDateInput.focus());
+                     }
+                })">
+                <div class="flex flex-col {{ $editingEntryType === null ? '' : 'space-y-4' }}">
+                    <!-- Earning Form -->
+                    <div class="flex flex-row space-x-4">
+                        <button wire:click="addEntry('Earning')" class="w-1/2 bg-slate-800 text-green-500 hover:text-green-300 font-fantasque font-bold rounded-xl p-2">
+                            {{ $editingEntryId && $editingEntryType === 'Earning' ? 'Update Earning' : 'Add Earning' }}
+                        </button>
+
+                        <button wire:click="addEntry('Expense')" type="submit" class="w-1/2 bg-slate-800 text-red-500 hover:text-red-300 font-fantasque font-bold rounded-xl p-2">
+                            {{ $editingEntryId && $editingEntryType === 'Earning' ? 'Update Expense' : 'Add Expense' }}
+                        </button>
+                    </div>
+
+                    <div class="{{ $editingEntryType === null ? 'hidden' : '' }}">
+                        <!-- Earning Form -->
+                        <form wire:submit.prevent="submitEarning" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Expense' ? 'hidden' : '' }}">
+                            <p class="text-lg font-bold text-green-500">Earning</p>
+                            <div>
+                                <label class="text-slate-300 font-bold">Date:</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="datetime-local" wire:model="earningForm.date" x-ref="earningDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Amount:</label>
+                                <input type="decimal" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Category:</label>
+                                <select wire:model="earningForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                    @foreach($earningCategories as $category)
+                                        <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Description:</label>
+                                <textarea wire:model="earningForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
+                            </div>
+                            <div class="flex-grow"></div>
+                            <div class="self-end flex space-x-2">
+                                @if($editingEntryId && $editingEntryType === 'Earning')
+                                    <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                                        Cancel Edit
+                                    </button>
+                                @endif
+                                @if($editingEntryId === null)
+                                    <button type="button" wire:click="cancelAdd" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                                        Cancel
+                                    </button>
+                                @endif
+                                <button type="submit" class="bg-green-500 text-white font-extrabold rounded-xl p-2">
+                                    {{ $editingEntryId && $editingEntryType === 'Earning' ? 'Update Earning' : 'Add Earning' }}
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Expense Form -->
+                        <form wire:submit.prevent="submitExpense" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Earning' ? 'hidden' : '' }}">
+                            <p class="text-lg font-bold text-red-500">Expense</p>
+                            <div>
+                                <label class="text-slate-300 font-bold">Date:</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="datetime-local" wire:model="expenseForm.date" x-ref="expenseDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Amount:</label>
+                                <input type="decimal" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Category:</label>
+                                <select wire:model="expenseForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                    @foreach($expenseCategories as $category)
+                                        <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-bold">Description:</label>
+                                <textarea wire:model="expenseForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
+                            </div>
+                            <div class="flex-grow"></div>
+                            <div class="self-end flex space-x-2">
+                                @if($editingEntryId && $editingEntryType === 'Expense')
+                                    <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                                        Cancel Edit
+                                    </button>
+                                @endif
+                                @if($editingEntryId === null)
+                                    <button type="button" wire:click="cancelAdd" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
+                                        Cancel
+                                    </button>
+                                @endif
+                                <button type="submit" class="bg-red-500 text-white font-extrabold rounded-xl p-2">
+                                    {{ $editingEntryId && $editingEntryType === 'Expense' ? 'Update Expense' : 'Add Expense' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -190,6 +212,17 @@
     document.addEventListener('livewire:initialized', () => {
         Livewire.on('scrollToTop', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('scrollToBottom', () => {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
         });
     });
 </script>

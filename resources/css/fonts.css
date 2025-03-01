@@ -1,28 +1,28 @@
 
 @font-face {
     font-family: 'Fantasque Sans Mono';
-    src: url('/fonts/FantasqueSansMNerdFont-Regular.ttf') format('truetype');
+    src: url('../fonts/FantasqueSansMNerdFont-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Fantasque Sans Mono';
-    src: url('/fonts/FantasqueSansMNerdFontMono-Bold.ttf') format('truetype');
+    src: url('../fonts/FantasqueSansMNerdFontMono-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Fantasque Sans Mono';
-    src: url('/fonts/FantasqueSansMNerdFontMono-Italic.ttf') format('truetype');
+    src: url('../fonts/FantasqueSansMNerdFontMono-Italic.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Fantasque Sans Mono';
-    src: url('/fonts/FantasqueSansMNerdFontMono-BoldItalic.ttf') format('truetype');
+    src: url('../fonts/FantasqueSansMNerdFontMono-BoldItalic.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
