@@ -1,7 +1,14 @@
-<div class="flex flex-col items-center px-4 py-6 mx-auto mt-20 max-w-7xl lg:px-0">
-    <div class="flex flex-col mt-4 w-full space-y-4">
-        <div class="p-4 w-full rounded-2xl bg-slate-700">
-            <p class="font-bold text-2xl text-slate-100 mb-4 font-fantasque text-center">Tracker</p>
+<div class="flex flex-col items-center pb-4 px-4 mx-auto mt-20 max-w-7xl lg:px-0">
+    <div class="flex flex-col w-full space-y-4">
+        <p class="font-bold text-2xl text-slate-100 font-fantasque text-center">Tracker</p>
+        <div class="pb-4 px-4 w-full rounded-2xl bg-slate-700">
+            <div class="flex flex-col space-y-4 my-4">
+                <div class="self-center">
+                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full size-24 object-cover">
+                </div>
+                <p class="text-center font-fantasque text-slate-400 mt-2">{{ $this->user->name }}</p>
+            </div>
+
             <div class="flex flex-col items-center min-w-full">
                 <!-- Add search bar -->
                 <div class="w-full mb-4">
@@ -23,7 +30,7 @@
                                 <th class="px-4 py-2 text-left">Type</th>
                                 <th class="px-4 py-2 text-left">Category</th>
                                 <th class="px-4 py-2 text-left">Description</th>
-                                <th class="px-4 py-2 text-right border-l border-r">Amount</th>
+                                <th class="px-4 py-2 text-right">Amount</th>
                                 <th class="px-4 py-2">Action</th>
                             </tr>
                         </thead>
@@ -39,7 +46,7 @@
                                         <td class="font-bold px-4 py-2 {{ $entry['type'] == 'Expense' ? 'text-red-600' : 'text-green-600' }}">{{ $entry['type'] }}</td>
                                         <td class="font-bold px-4 py-2 order-gray-400">{{ $entry['category'] }}</td>
                                         <td class="font-bold px-4 py-2">{{ $entry['description'] }}</td>
-                                        <td class="font-bold px-4 py-2 text-right border-r border-l {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
+                                        <td class="font-bold px-4 py-2 text-right {{ $entry['type'] == 'Expense' ? 'text-red-300' : 'text-green-300' }}">{{ $entry['amount'] }}</td>
                                         <td class="p-4">
                                             <div class="inline-flex">
                                                 <button wire:click="editEntry({{ $entry['id'] }}, '{{ $entry['type'] }}')" class="bg-blue-500 text-white rounded-l-xl p-2 mr-1">Edit</button>
@@ -49,24 +56,24 @@
                                     </tr>
                                 @endforeach
                             @endif
-                            <tr class="border-t border-black">
+                            <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-green-300 bg-slate-800">Total Earnings:</th>
-                                <th class="px-4 py-2 text-right text-green-300 bg-slate-800 border-r border-l">{{ $totalEarnings }}</th>
+                                <th class="px-4 py-2 text-right text-green-300 bg-slate-800">{{ $totalEarnings }}</th>
                                 <th class="bg-slate-800"></th>
                             </tr>
                             <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-red-300 bg-slate-800">Total Expenses:</th>
-                                <th class="px-4 py-2 text-right text-red-300 bg-slate-800 border-r border-l">{{ $totalExpenses }}</th>
+                                <th class="px-4 py-2 text-right text-red-300 bg-slate-800">{{ $totalExpenses }}</th>
                                 <th class="bg-slate-800"></th>
                             </tr>
                             <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-white bg-slate-900">Page {{ $entries['current_page'] }} Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900 border-r border-l">{{ $currentPageBalance }}</th>
+                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900">{{ $currentPageBalance }}</th>
                                 <th class="bg-slate-900"></th>
                             </tr>
                             <tr>
                                 <th colspan="4" class="px-4 py-2 font-light text-right text-slate-300 bg-slate-900">All Pages Total Balance:</th>
-                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900 border-r border-l">{{ $totalBalance }}</th>
+                                <th class="px-4 py-2 text-right text-slate-300 bg-slate-900">{{ $totalBalance }}</th>
                                 <th class="bg-slate-900"></th>
                             </tr>
                         </tbody>

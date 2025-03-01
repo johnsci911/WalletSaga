@@ -13,6 +13,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardRepository
 {
+    public function currentUser()
+    {
+        return Auth::user();
+    }
+
     public function getAllEntries($search)
     {
         $search = '%' . strtolower($search) . '%';

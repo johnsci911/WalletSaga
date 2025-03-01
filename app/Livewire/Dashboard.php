@@ -13,6 +13,7 @@ class Dashboard extends Component
 
     protected $queryString = ['page'];
 
+    public $user;
     public $search = '';
     public $entries = [];
     public $currentPageBalance = 0;
@@ -150,7 +151,9 @@ class Dashboard extends Component
 
     public function mount()
     {
+        $this->user = $this->repository->currentUser();
         $this->page = request()->query('page', 1);
+
         $this->refreshData();
     }
 
