@@ -12,9 +12,14 @@ export default defineConfig({
         include: ['apexcharts']
     },
     build: {
-        commonjsOptions: {
-            include: ['node_modules/**']
-        }
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['apexcharts'],
+                },
+            },
+        },
+        chunkSizeWarningLimit: 1000,
     },
     server: {
         hmr: {
