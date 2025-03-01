@@ -12,8 +12,8 @@ export default defineConfig({
         include: ['apexcharts']
     },
     build: {
-        rollupOptions: {
-            external: ['apexcharts']
+        commonjsOptions: {
+            include: ['node_modules/**']
         }
     },
     server: {
