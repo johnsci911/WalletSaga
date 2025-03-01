@@ -126,29 +126,32 @@
                         <!-- Earning Form -->
                         <form wire:submit.prevent="submitEarning" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Expense' ? 'hidden' : '' }}">
                             <p class="text-lg font-bold text-green-500">Earning</p>
-                            <div>
-                                <label class="text-slate-300 font-bold">Date:</label>
-                                <div class="flex items-center space-x-2">
-                                    <input type="datetime-local" wire:model="earningForm.date" x-ref="earningDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+                                <div class="w-full lg:w-1/2 space-y-4">
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Date:</label>
+                                        <div class="flex items-center">
+                                            <input type="datetime-local" wire:model="earningForm.date" x-ref="earningDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Amount:</label>
+                                        <input type="decimal" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Category:</label>
+                                        <select wire:model="earningForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                            @foreach($earningCategories as $category)
+                                                <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-full lg:w-1/2 space-y-2">
+                                    <label class="text-slate-300 font-bold">Description:</label>
+                                    <textarea wire:model="earningForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required rows=8></textarea>
                                 </div>
                             </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Amount:</label>
-                                <input type="decimal" wire:model="earningForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
-                            </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Category:</label>
-                                <select wire:model="earningForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                                    @foreach($earningCategories as $category)
-                                        <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Description:</label>
-                                <textarea wire:model="earningForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
-                            </div>
-                            <div class="flex-grow"></div>
                             <div class="self-end flex space-x-2">
                                 @if($editingEntryId && $editingEntryType === 'Earning')
                                     <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
@@ -169,29 +172,32 @@
                         <!-- Expense Form -->
                         <form wire:submit.prevent="submitExpense" class="flex flex-col p-4 space-y-4 w-full rounded-xl bg-slate-800 {{ $editingEntryType === 'Earning' ? 'hidden' : '' }}">
                             <p class="text-lg font-bold text-red-500">Expense</p>
-                            <div>
-                                <label class="text-slate-300 font-bold">Date:</label>
-                                <div class="flex items-center space-x-2">
-                                    <input type="datetime-local" wire:model="expenseForm.date" x-ref="expenseDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+                                <div class="w-full lg:w-1/2 space-y-4">
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Date:</label>
+                                        <div class="flex items-center">
+                                            <input type="datetime-local" wire:model="expenseForm.date" x-ref="expenseDateInput" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Amount:</label>
+                                        <input type="decimal" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-slate-300 font-bold">Category:</label>
+                                        <select wire:model="expenseForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
+                                            @foreach($expenseCategories as $category)
+                                                <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-full lg:w-1/2 space-y-2">
+                                    <label class="text-slate-300 font-bold">Description:</label>
+                                    <textarea wire:model="expenseForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required rows=8></textarea>
                                 </div>
                             </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Amount:</label>
-                                <input type="decimal" wire:model="expenseForm.amount" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required>
-                            </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Category:</label>
-                                <select wire:model="expenseForm.category" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full">
-                                    @foreach($expenseCategories as $category)
-                                        <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-slate-300 font-bold">Description:</label>
-                                <textarea wire:model="expenseForm.description" class="border border-gray-200 bg-slate-200 rounded-xl p-2 w-full" required></textarea>
-                            </div>
-                            <div class="flex-grow"></div>
                             <div class="self-end flex space-x-2">
                                 @if($editingEntryId && $editingEntryType === 'Expense')
                                     <button type="button" wire:click="cancelEdit" class="bg-gray-500 text-white font-extrabold rounded-xl p-2">
