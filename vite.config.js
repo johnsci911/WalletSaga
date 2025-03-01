@@ -8,6 +8,14 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    optimizeDeps: {
+        include: ['apexcharts']
+    },
+    build: {
+        rollupOptions: {
+            external: ['apexcharts']
+        }
+    },
     server: {
         hmr: {
             host: 'walletsaga.test'
