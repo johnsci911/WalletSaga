@@ -82,8 +82,8 @@
 
                 @if(isset($entries['links']))
                     <div class="p-4 bg-slate-900 w-full rounded-b-2xl flex justify-center">
-                        <div class="overflow-x-auto max-w-full scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
-                            <div class="flex flex-nowrap gap-2 px-2">
+                        <div class="overflow-x-auto w-full scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
+                            <div class="flex flex-nowrap gap-2 px-2 w-full justify-between">
                                 @foreach($entries['links'] as $link)
                                     @php
                                         $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
