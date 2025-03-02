@@ -81,19 +81,23 @@
                 </div>
 
                 @if(isset($entries['links']))
-                    <div class="overflow-x-auto p-4 bg-slate-900 w-full whitespace-nowrap rounded-b-2xl scrollbar-thin">
-                        @foreach($entries['links'] as $link)
-                            @php
-                                $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
-                            @endphp
-                            <button
-                                wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
-                                class="px-4 py-2 rounded-lg hover:text-white {{ $link['active'] ? 'font-bold bg-slate-700 text-white' : 'font-light bg-slate-800 text-slate-400' }}"
-                                {{ $link['url'] ? '' : 'disabled' }}
-                            >
-                                {!! $link['label'] !!}
-                            </button>
-                        @endforeach
+                    <div class="p-4 bg-slate-900 w-full rounded-b-2xl flex justify-center">
+                        <div class="overflow-x-auto max-w-full scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
+                            <div class="flex flex-nowrap gap-2 px-2">
+                                @foreach($entries['links'] as $link)
+                                    @php
+                                        $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
+                                    @endphp
+                                    <button
+                                        wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
+                                        class="px-4 py-2 rounded-lg hover:text-white whitespace-nowrap {{ $link['active'] ? 'font-bold bg-slate-700 text-white' : 'font-light bg-slate-800 text-slate-400' }}"
+                                        {{ $link['url'] ? '' : 'disabled' }}
+                                    >
+                                        {!! $link['label'] !!}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>
