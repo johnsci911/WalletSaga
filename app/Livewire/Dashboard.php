@@ -211,6 +211,8 @@ class Dashboard extends Component
         $this->refreshData();
         $this->gotoPage($currentPage);
         $this->reset('earningForm');
+
+        $this->dispatch('scrollToTop');
     }
 
     public function submitExpense()
@@ -230,6 +232,8 @@ class Dashboard extends Component
         $this->refreshData();
         $this->gotoPage($currentPage);
         $this->reset('expenseForm');
+
+        $this->dispatch('scrollToTop');
     }
 
     private function formatDateForDisplay($date)
