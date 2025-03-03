@@ -82,7 +82,8 @@
             },
             colors: ['#3b82f6', '#22c55e', '#ef4444'], // Blue, Green, Red
             stroke: {
-                curve: 'smooth'
+                curve: 'smooth',
+                width: 1,
             },
             legend: {
                 labels: {
