@@ -44,6 +44,16 @@ class FinancialTrend extends Component
         $expenses = $this->getExpensesInDateRange($startDate, $endDate);
 
         $dailyBalances = [];
+        $cumulativeBalance = 0;
+
+        // Calculate the initial balance (all earnings and expenses before the start date)
+        $initialEarnings = Earning::where('user_id', Auth::id())
+            ->where('date', '<', $startDate)
+            ->sum('amount');
+        $initialExpenses = Expense::where('user_id', Auth::id())
+            ->where('date', '<', $startDate)
+            ->sum('amount');
+        $cumulativeBalance = $initialEarnings - $initialExpenses;
 
         for ($date = $startDate->copy(); $date <= $endDate; $date->addDay()) {
             $currentDate = $date->format('Y-m-d');
@@ -56,13 +66,13 @@ class FinancialTrend extends Component
                 ->where('date', '<', $date->copy()->addDay()->startOfDay()->format('Y-m-d H:i:s'))
                 ->sum('amount');
 
-            $dailyBalance = $dailyEarnings - $dailyExpenses;
+            $cumulativeBalance += $dailyEarnings - $dailyExpenses;
 
             $dailyBalances[] = [
-                'date' => $currentDate,
+                'date'     => $currentDate,
                 'earnings' => $dailyEarnings,
                 'expenses' => $dailyExpenses,
-                'balance' => $dailyBalance
+                'balance'  => $cumulativeBalance
             ];
         }
 
