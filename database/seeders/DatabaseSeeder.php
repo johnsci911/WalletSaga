@@ -41,6 +41,15 @@ class DatabaseSeeder extends Seeder
             'Other'
         ];
 
+        // Create all categories upfront
+        foreach ($earningCategories as $category) {
+            EarningCategory::create(['name' => $category]);
+        }
+
+        foreach ($expenseCategories as $category) {
+            ExpenseCategory::create(['name' => $category]);
+        }
+
         $dates = [];
         $startDate = now()->startOfDay();
         for ($day = 0; $day < 7; $day++) {
@@ -51,24 +60,21 @@ class DatabaseSeeder extends Seeder
         }
         sort($dates);
 
+        $earningCategoryIds = EarningCategory::pluck('id')->toArray();
+        $expenseCategoryIds = ExpenseCategory::pluck('id')->toArray();
 
         foreach ($dates as $date) {
-            EarningCategory::factory()->create(['name' => array_rand($earningCategories)])
-                ->each(function ($earningCategory) use ($user, $date) {
-                    Earning::factory(3)->create([
-                        'earning_categories_id' => $earningCategory->id,
-                        'user_id'               => $user->id,
-                        'created_at'            => date('Y-m-d H:i:s', $date)
-                    ]);
-                });
-            ExpenseCategory::factory()->create(['name' => array_rand($expenseCategories)])
-                ->each(function ($earningCategory) use ($user, $date) {
-                    Expense::factory(1)->create([
-                        'expense_categories_id' => $earningCategory->id,
-                        'user_id'               => $user->id,
-                        'created_at'            => date('Y-m-d H:i:s', $date)
-                    ]);
-                });
+            Earning::factory(3)->create([
+                'earning_categories_id' => $earningCategoryIds[array_rand($earningCategoryIds)],
+                'user_id'               => $user->id,
+                'created_at'            => date('Y-m-d H:i:s', $date)
+            ]);
+
+            Expense::factory(1)->create([
+                'expense_categories_id' => $expenseCategoryIds[array_rand($expenseCategoryIds)],
+                'user_id'               => $user->id,
+                'created_at'            => date('Y-m-d H:i:s', $date)
+            ]);
         }
     }
 }
