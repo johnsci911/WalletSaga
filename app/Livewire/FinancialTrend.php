@@ -38,7 +38,7 @@ class FinancialTrend extends Component
     public function getDailyBalances()
     {
         $startDate = now()->subDays(30)->startOfDay();
-        $endDate = now()->endOfDay();
+        $endDate = now()->addDay();
 
         $earnings = $this->getEarningsInDateRange($startDate, $endDate);
         $expenses = $this->getExpensesInDateRange($startDate, $endDate);
