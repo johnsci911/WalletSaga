@@ -52,10 +52,10 @@ class DatabaseSeeder extends Seeder
 
         $dates = [];
         $startDate = now()->startOfDay();
-        for ($day = 0; $day < 7; $day++) {
+        for ($day = 0; $day < 30; $day++) {
             $entriesPerDay = rand(3, 5);
             for ($entry = 0; $entry < $entriesPerDay; $entry++) {
-                $dates[] = $startDate->copy()->addDays($day)->addSeconds(rand(0, 86399))->timestamp;
+                $dates[] = $startDate->copy()->subDays($day)->addSeconds(rand(0, 86399))->timestamp;
             }
         }
         sort($dates);
@@ -67,13 +67,13 @@ class DatabaseSeeder extends Seeder
             Earning::factory(3)->create([
                 'earning_categories_id' => $earningCategoryIds[array_rand($earningCategoryIds)],
                 'user_id'               => $user->id,
-                'created_at'            => date('Y-m-d H:i:s', $date)
+                'date'                  => date('Y-m-d H:i:s', $date)
             ]);
 
             Expense::factory(1)->create([
                 'expense_categories_id' => $expenseCategoryIds[array_rand($expenseCategoryIds)],
                 'user_id'               => $user->id,
-                'created_at'            => date('Y-m-d H:i:s', $date)
+                'date'                  => date('Y-m-d H:i:s', $date)
             ]);
         }
     }

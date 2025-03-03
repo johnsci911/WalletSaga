@@ -6,25 +6,58 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var dailyBalances = @json($dailyBalances);
+
+        var dates    = [];
+        var earnings = [];
+        var expenses = [];
+        var balances = [];
+
+        dailyBalances.forEach(function(item) {
+            dates.push(item.date);
+            earnings.push(parseFloat(item.earnings));
+            expenses.push(parseFloat(item.expenses));
+            balances.push(parseFloat(item.balance));
+        });
+
         var options = {
             series: [{
                 name: 'Balance',
-                data: [500, 700, 600, 800, 950, 1100, 1050, 1200, 1300, 1150]
+                data: balances
             }, {
                 name: 'Earnings',
-                data: [1000, 1200, 1100, 1300, 1400, 1600, 1500, 1700, 1800, 1650]
+                data: earnings
             }, {
                 name: 'Expenses',
-                data: [50, 500, 500, 500, 450, 500, 450, 500, 500, 200]
+                data: expenses
             }],
             chart: {
                 type: 'line',
                 height: 400,
                 background: '#334155', // Slate-700
                 foreColor: '#cbd5e1', // Slate-300
+                zoom: {
+                    enabled: true,
+                    type: 'xy',
+                    autoScaleYaxis: true
+                },
+                selection: {
+                    enabled: false
+                },
+                toolbar: {
+                    tools: {
+                        download: false,
+                        selection: false,
+                        zoom: false,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: false,
+                        reset: true
+                    }
+                }
             },
             xaxis: {
-                categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10'],
+                categories: dates,
                 labels: {
                     style: {
                         colors: '#cbd5e1', // Slate-300
@@ -42,6 +75,9 @@
                     style: {
                         colors: '#cbd5e1', // Slate-300
                     },
+                    formatter: function (value) {
+                        return '$' + value.toFixed(2);
+                    }
                 },
             },
             colors: ['#3b82f6', '#22c55e', '#ef4444'], // Blue, Green, Red
@@ -58,6 +94,11 @@
             },
             tooltip: {
                 theme: 'dark',
+                y: {
+                    formatter: function(value) {
+                        return '$' + value.toFixed(2);
+                    }
+                }
             },
         };
 
