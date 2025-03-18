@@ -62,7 +62,7 @@ class DashboardRepository
     {
         return EarningCategory::where('name', '!=', 'Other')
             ->get()
-            ->merge(EarningCategory::where('name', 'Other'))
+            ->merge(EarningCategory::where('name', 'Other')->get())
             ->toArray();
     }
 
