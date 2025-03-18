@@ -60,12 +60,18 @@ class DashboardRepository
 
     public function getEarningCategories()
     {
-        return EarningCategory::all()->toArray();
+        return EarningCategory::where('name', '!=', 'Other')
+            ->get()
+            ->merge(EarningCategory::where('name', 'Other'))
+            ->toArray();
     }
 
     public function getExpenseCategories()
     {
-        return ExpenseCategory::all()->toArray();
+        return ExpenseCategory::where('name', '!=', 'Other')
+            ->get()
+            ->merge(ExpenseCategory::where('name', 'Other')->get())
+            ->toArray();
     }
 
     public function createEarning($data)
