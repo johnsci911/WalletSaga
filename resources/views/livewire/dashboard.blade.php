@@ -11,8 +11,8 @@
 
             <div class="flex flex-col items-center min-w-full">
                 <!-- Add search bar -->
-                <div class="w-full mb-4">
-                    <input type="text" wire:model.live.debounce.150ms="search" placeholder="Search entries..." class="w-full p-2 rounded-xl bg-slate-800 text-slate-100 border border-slate-600">
+                <div class="w-full mb-4 flex justify-center">
+                    <input type="text" wire:model.live.debounce.150ms="search" placeholder="Search entries..." class="w-3/4 p-2 rounded-xl bg-slate-800 text-slate-100 border border-slate-600">
                 </div>
 
                 <!-- Scrollable container for table and links -->
@@ -82,8 +82,8 @@
 
                 @if(isset($entries['links']))
                     <div class="p-4 bg-slate-900 w-full rounded-b-2xl flex justify-center">
-                        <div class="overflow-x-auto w-full scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
-                            <div class="flex flex-nowrap gap-2 px-2 w-full justify-between">
+                        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 max-w-3xl w-full">
+                            <div class="flex flex-nowrap gap-2 px-2 mx-auto" style="width: fit-content;">
                                 @foreach($entries['links'] as $link)
                                     @php
                                         $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
