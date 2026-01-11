@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Earning;
 use App\Models\Expense;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -37,11 +38,25 @@ class FinancialTrend extends Component
 
     public function getDailyBalances()
     {
-        $startDate = now()->subDays(30)->startOfDay();
-        $endDate = now()->addDay();
+        $startDate = now()->startOfMonth();
+        $endDate = now()->endOfMonth();
 
         $earnings = $this->getEarningsInDateRange($startDate, $endDate);
         $expenses = $this->getExpensesInDateRange($startDate, $endDate);
+
+        // Find the last date with actual data
+        $lastEarningDate = $earnings->max('date');
+        $lastExpenseDate = $expenses->max('date');
+
+        // Use the most recent date between earnings and expenses, or today if no data exists
+        $lastDataDate = max($lastEarningDate, $lastExpenseDate);
+
+        if ($lastDataDate) {
+            $endDate = min(Carbon::parse($lastDataDate), now()->endOfMonth());
+        } else {
+            // If no data exists, just show today
+            $endDate = now();
+        }
 
         $dailyBalances = [];
         $cumulativeBalance = 0;
@@ -56,7 +71,7 @@ class FinancialTrend extends Component
         $cumulativeBalance = $initialEarnings - $initialExpenses;
 
         for ($date = $startDate->copy(); $date <= $endDate; $date->addDay()) {
-            $currentDate = $date->format('Y-m-d');
+            $currentDate = $date->format('M d');
 
             $dailyEarnings = $earnings->where('date', '>=', $date->startOfDay()->format('Y-m-d H:i:s'))
                 ->where('date', '<', $date->copy()->addDay()->startOfDay()->format('Y-m-d H:i:s'))
@@ -69,10 +84,10 @@ class FinancialTrend extends Component
             $cumulativeBalance += $dailyEarnings - $dailyExpenses;
 
             $dailyBalances[] = [
-                'date'     => $currentDate,
+                'date' => $currentDate,
                 'earnings' => $dailyEarnings,
                 'expenses' => $dailyExpenses,
-                'balance'  => $cumulativeBalance
+                'balance' => $cumulativeBalance
             ];
         }
 
