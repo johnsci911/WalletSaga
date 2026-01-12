@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name'  => 'John Karlo',
-            'email' => 'johnkarlo.315@gmail.com'
+            'name'     => 'John Karlo',
+            'email'    => 'johnkarlo.315@gmail.com',
+            'password' => 'password',
         ]);
 
         $earningCategories = [
@@ -76,5 +77,21 @@ class DatabaseSeeder extends Seeder
                 'date'                  => date('Y-m-d H:i:s', $date)
             ]);
         }
+
+        // Seed dynamic goals using factory
+        // Create 25 active goals with random progress
+        \App\Models\Goal::factory(25)->create([
+            'user_id' => $user->id,
+        ]);
+
+        // Create 3 completed goals
+        \App\Models\Goal::factory(3)->completed()->create([
+            'user_id' => $user->id,
+        ]);
+
+        // Create 2 overdue goals
+        \App\Models\Goal::factory(2)->overdue()->create([
+            'user_id' => $user->id,
+        ]);
     }
 }
