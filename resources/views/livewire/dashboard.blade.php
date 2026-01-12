@@ -99,23 +99,86 @@
                     </table>
                 </div>
 
+                {{-- Pagination --}}
                 @if(isset($entries['links']))
-                <div class="p-4 bg-slate-900 w-full rounded-b-2xl flex justify-center">
-                    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 max-w-3xl w-full">
-                        <div class="flex flex-nowrap gap-2 px-2 mx-auto" style="width: fit-content;">
-                            @foreach($entries['links'] as $link)
-                            @php
-                            $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
-                            @endphp
-                            <button
-                                wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
-                                class="px-4 py-2 rounded-lg hover:text-white whitespace-nowrap {{ $link['active'] ? 'font-bold bg-slate-700 text-white' : 'font-light bg-slate-800 text-slate-400' }}"
-                                {{ $link['url'] ? '' : 'disabled' }}>
-                                {!! $link['label'] !!}
-                            </button>
-                            @endforeach
+                <div class="p-4 bg-slate-900 w-full rounded-b-2xl">
+                    <nav role="navigation" aria-label="Pagination Navigation">
+                        {{-- Mobile --}}
+                        <div class="flex flex-col items-center gap-3 sm:hidden">
+                            <span class="text-sm text-slate-400">
+                                Page {{ $entries['current_page'] }} of {{ $entries['last_page'] }}
+                            </span>
+                            <div class="flex gap-2">
+                                @foreach($entries['links'] as $link)
+                                @if($link['label'] === '&laquo; Previous' || $link['label'] === 'Next &raquo;')
+                                @if($link['url'])
+                                <button wire:click="gotoPage({{ $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : 'null' }})"
+                                    class="px-4 py-2 text-sm font-medium text-slate-200 bg-slate-700 border border-slate-600 rounded-md hover:bg-slate-600 transition-colors">
+                                    {{ $link['label'] === '&laquo; Previous' ? 'Previous' : 'Next' }}
+                                </button>
+                                @else
+                                <span class="px-4 py-2 text-sm font-medium text-slate-500 bg-slate-700 border border-slate-600 cursor-default rounded-md">
+                                    {{ $link['label'] === '&laquo; Previous' ? 'Previous' : 'Next' }}
+                                </span>
+                                @endif
+                                @endif
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+
+                        {{-- Desktop --}}
+                        <div class="hidden sm:flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-slate-400">
+                                    Showing
+                                    <span class="font-medium text-slate-200">{{ $entries['from'] }}</span>
+                                    to
+                                    <span class="font-medium text-slate-200">{{ $entries['to'] }}</span>
+                                    of
+                                    <span class="font-medium text-slate-200">{{ $entries['total'] }}</span>
+                                    results
+                                </p>
+                            </div>
+                            <div class="flex gap-1">
+                                @php
+                                $currentPage = $entries['current_page'];
+                                $lastPage = $entries['last_page'];
+                                $onEachSide = 2;
+
+                                $start = max(1, $currentPage - $onEachSide);
+                                $end = min($lastPage, $currentPage + $onEachSide);
+                                @endphp
+
+                                @foreach($entries['links'] as $link)
+                                @php
+                                $pageNumber = $link['url'] ? ltrim(parse_url($link['url'], PHP_URL_QUERY), 'page=') : null;
+                                $isArrow = $link['label'] === '&laquo; Previous' || $link['label'] === 'Next &raquo;';
+                                $isEllipsis = $link['label'] === '...';
+
+                                // Skip page numbers outside our range
+                                if (!$isArrow && !$isEllipsis && $pageNumber) {
+                                $pageNum = (int)$pageNumber;
+                                // Show if it's first page, last page, or in range
+                                if ($pageNum != 1 && $pageNum != $lastPage && ($pageNum < $start || $pageNum> $end)) {
+                                    continue;
+                                    }
+                                    }
+                                    @endphp
+
+                                    @if($link['url'])
+                                    <button wire:click="gotoPage({{ $pageNumber ?: 'null' }})"
+                                        class="px-3 py-2 text-sm font-medium rounded-md transition-colors {{ $link['active'] ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 border border-slate-600 hover:bg-slate-600' }}">
+                                        {!! $link['label'] !!}
+                                    </button>
+                                    @else
+                                    <span class="px-3 py-2 text-sm font-medium rounded-md {{ $link['active'] ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-500 border border-slate-600 cursor-default' }}">
+                                        {!! $link['label'] !!}
+                                    </span>
+                                    @endif
+                                    @endforeach
+                            </div>
+                        </div>
+                    </nav>
                 </div>
                 @endif
             </div>

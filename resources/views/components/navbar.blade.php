@@ -22,23 +22,24 @@
                     <div class="flex space-x-4">
                         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-slate-700 hover:text-white' : 'hover:text-white hover:bg-gray-800' }} px-3 py-2 rounded-md text-sm font-medium">Home</a>
                         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'bg-slate-700 hover:text-white' : 'hover:text-white hover:bg-gray-800' }} px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <a href="{{ route('goals') }}" class="{{ request()->routeIs('goals') ? 'bg-slate-700 hover:text-white' : 'hover:text-white hover:bg-gray-800' }} px-3 py-2 rounded-md text-sm font-medium">Goals</a>
                     </div>
                 </div>
             </div>
             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 @if (Auth::check())
-                    <div class="hidden sm:flex items-center space-x-4">
-                        <p class="text-sm">Welcome, {{ Auth::user()->name }}!</p>
-                        <a href="{{ route('profile.show') }}" class="text-sm font-medium hover:text-white">Profile Settings</a>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-400">Logout</button>
-                        </form>
-                    </div>
+                <div class="hidden sm:flex items-center space-x-4">
+                    <p class="text-sm">Welcome, {{ Auth::user()->name }}!</p>
+                    <a href="{{ route('profile.show') }}" class="text-sm font-medium hover:text-white">Profile Settings</a>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-400">Logout</button>
+                    </form>
+                </div>
                 @else
-                    <div class="hidden sm:block">
-                        <a href="{{ route('register') }}" class="text-sm font-medium text-blue-400 hover:text-blue-200">Register</a>
-                    </div>
+                <div class="hidden sm:block">
+                    <a href="{{ route('register') }}" class="text-sm font-medium text-blue-400 hover:text-blue-200">Register</a>
+                </div>
                 @endif
             </div>
         </div>
@@ -49,14 +50,15 @@
         <div class="px-2 pt-2 pb-3 space-y-1">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-slate-800 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Home</a>
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'bg-slate-800 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+            <a href="{{ route('goals') }}" class="{{ request()->routeIs('goals') ? 'bg-slate-800 text-slate-300 hover:text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Goals</a>
             @if (Auth::check())
-                <a href="{{ route('profile.show') }}" class="text-slate-300 hover:bg-slate-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile Settings</a>
-                <form action="{{ route('logout') }}" method="POST" class="block">
-                    @csrf
-                    <button type="submit" class="text-red-600 hover:text-red-400 hover:bg-slate-900 block w-full text-left px-3 py-2 rounded-md text-base font-medium">Logout</button>
-                </form>
+            <a href="{{ route('profile.show') }}" class="text-slate-300 hover:bg-slate-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile Settings</a>
+            <form action="{{ route('logout') }}" method="POST" class="block">
+                @csrf
+                <button type="submit" class="text-red-600 hover:text-red-400 hover:bg-slate-900 block w-full text-left px-3 py-2 rounded-md text-base font-medium">Logout</button>
+            </form>
             @else
-                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-400 hover:bg-slate-800 block px-3 py-2 rounded-md text-base font-medium">Register</a>
+            <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-400 hover:bg-slate-800 block px-3 py-2 rounded-md text-base font-medium">Register</a>
             @endif
         </div>
     </div>
