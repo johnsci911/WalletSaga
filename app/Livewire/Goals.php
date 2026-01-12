@@ -51,6 +51,37 @@ class Goals extends Component
         return view('livewire.goals', ['goals' => $goals]);
     }
 
+    /**
+     * Get unique categories for the current user plus common defaults
+     */
+    public function getCategoriesProperty()
+    {
+        $existingCategories = Auth::user()->goals()
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->toArray();
+
+        $defaultCategories = [
+            'Travel',
+            'Education',
+            'Technology',
+            'Emergency Fund',
+            'Savings',
+            'Health',
+            'Insurance',
+            'Gifts',
+            'Vehicle',
+            'Home',
+            'Investment'
+        ];
+
+        return collect(array_merge($existingCategories, $defaultCategories))
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
     public function addGoal()
     {
         $this->resetForm();

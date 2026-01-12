@@ -1,36 +1,43 @@
-<div class="w-full max-w-4xl bg-slate-700 p-4 rounded-2xl shadow-md">
-    <h2 class="text-xl text-center mb-4">Monthly Financial Trend</h2>
-    <div id="trend-chart" style="height: 400px;"></div>
+<div class="w-full max-w-4xl rounded-2xl bg-slate-700 p-4 shadow-md">
+    <h2 class="mb-4 text-center font-fantasque text-xl text-slate-100">Monthly Financial Trend</h2>
+    <div id="trend-chart-{{ $this->getId() }}" style="height: 400px"></div>
 </div>
 
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var dailyBalances = @json($dailyBalances);
+<script>
+    (function () {
+        const renderChart = () => {
+            const chartElement = document.getElementById('trend-chart-{{ $this->getId() }}');
 
-            var dates = [];
-            var earnings = [];
-            var expenses = [];
-            var balances = [];
+            if (!chartElement) return;
 
-            dailyBalances.forEach(function (item) {
-                dates.push(item.date);
-                earnings.push(parseFloat(item.earnings));
-                expenses.push(parseFloat(item.expenses));
-                balances.push(parseFloat(item.balance));
-            });
+            // Wait for ApexCharts to be available
+            if (typeof window.ApexCharts === 'undefined') {
+                setTimeout(renderChart, 50);
+                return;
+            }
 
-            var options = {
-                series: [{
-                    name: 'Balance',
-                    data: balances
-                }, {
-                    name: 'Earnings',
-                    data: earnings
-                }, {
-                    name: 'Expenses',
-                    data: expenses
-                }],
+            // Prevent duplicate charts if function runs multiple times
+            if (chartElement.querySelector('.apexcharts-canvas')) {
+                chartElement.innerHTML = '';
+            }
+
+            const dailyBalances = @js($dailyBalances);
+
+            const options = {
+                series: [
+                    {
+                        name: 'Balance',
+                        data: dailyBalances.map((item) => parseFloat(item.balance)),
+                    },
+                    {
+                        name: 'Earnings',
+                        data: dailyBalances.map((item) => parseFloat(item.earnings)),
+                    },
+                    {
+                        name: 'Expenses',
+                        data: dailyBalances.map((item) => parseFloat(item.expenses)),
+                    },
+                ],
                 chart: {
                     type: 'line',
                     height: 400,
@@ -39,12 +46,13 @@
                     zoom: {
                         enabled: true,
                         type: 'xy',
-                        autoScaleYaxis: true
+                        autoScaleYaxis: true,
                     },
                     selection: {
-                        enabled: false
+                        enabled: false,
                     },
                     toolbar: {
+                        show: true,
                         tools: {
                             download: false,
                             selection: false,
@@ -52,15 +60,15 @@
                             zoomin: true,
                             zoomout: true,
                             pan: true,
-                            reset: true
-                        }
-                    }
+                            reset: true,
+                        },
+                    },
                 },
                 xaxis: {
-                    categories: dates,
+                    categories: dailyBalances.map((item) => item.date),
                     labels: {
                         style: {
-                            colors: '#cbd5e1', // Slate-300
+                            colors: '#cbd5e1',
                         },
                     },
                 },
@@ -68,26 +76,24 @@
                     title: {
                         text: 'Amount',
                         style: {
-                            color: '#cbd5e1', // Slate-300
+                            color: '#cbd5e1',
                         },
                     },
                     labels: {
                         style: {
-                            colors: '#cbd5e1', // Slate-300
+                            colors: '#cbd5e1',
                         },
-                        formatter: function (value) {
-                            return '$' + value.toFixed(2);
-                        }
+                        formatter: (value) => '$' + value.toFixed(2),
                     },
                 },
                 colors: ['#3b82f6', '#22c55e', '#ef4444'], // Blue, Green, Red
                 stroke: {
                     curve: 'smooth',
-                    width: 1,
+                    width: 2,
                 },
                 legend: {
                     labels: {
-                        colors: '#cbd5e1', // Slate-300
+                        colors: '#cbd5e1',
                     },
                 },
                 grid: {
@@ -96,15 +102,21 @@
                 tooltip: {
                     theme: 'dark',
                     y: {
-                        formatter: function (value) {
-                            return '$' + value.toFixed(2);
-                        }
-                    }
+                        formatter: (value) => '$' + value.toFixed(2),
+                    },
                 },
             };
 
-            var chart = new ApexCharts(document.querySelector("#trend-chart"), options);
+            const chart = new window.ApexCharts(chartElement, options);
             chart.render();
+        };
+
+        // Initial render attempt
+        renderChart();
+
+        // Handle Livewire navigation
+        document.addEventListener('livewire:navigated', renderChart, {
+            once: true,
         });
-    </script>
-@endpush
+    })();
+</script>

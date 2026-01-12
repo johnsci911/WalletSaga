@@ -43,18 +43,24 @@
                 </div>
 
                 <div class="mt-4 max-w-xl text-sm text-gray-600">
-                    <p class="font-semibold">
-                        {{ __('Setup Key') }}: {{ decrypt($this->user->two_factor_secret) }}
-                    </p>
+                    <p class="font-semibold">{{ __('Setup Key') }}: {{ decrypt($this->user->two_factor_secret) }}</p>
                 </div>
 
                 @if ($showingConfirmation)
                     <div class="mt-4">
                         <x-label for="code" value="{{ __('Code') }}" />
 
-                        <x-input id="code" type="text" name="code" class="block mt-1 w-1/2" inputmode="numeric" autofocus autocomplete="one-time-code"
+                        <x-input
+                            id="code"
+                            type="text"
+                            name="code"
+                            class="block mt-1 w-1/2"
+                            inputmode="numeric"
+                            autofocus
+                            autocomplete="one-time-code"
                             wire:model="code"
-                            wire:keydown.enter="confirmTwoFactorAuthentication" />
+                            wire:keydown.enter="confirmTwoFactorAuthentication"
+                        />
 
                         <x-input-error for="code" class="mt-2" />
                     </div>
@@ -117,7 +123,6 @@
                         </x-danger-button>
                     </x-confirms-password>
                 @endif
-
             @endif
         </div>
     </x-slot>

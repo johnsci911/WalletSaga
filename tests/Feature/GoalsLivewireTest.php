@@ -228,7 +228,7 @@ test('goals are ordered by completion status then deadline', function () {
     ]);
 
     $component = Livewire::test(Goals::class);
-    $goals = $component->get('goals');
+    $goals = $component->viewData('goals');
 
     expect($goals[0]['name'])->toBe('Active Soon')
         ->and($goals[1]['name'])->toBe('Active Later')

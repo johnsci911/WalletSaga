@@ -18,5 +18,4 @@ class Earning extends Model
     {
         return $this->belongsTo(EarningCategory::class);
     }
-
 }

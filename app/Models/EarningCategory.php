@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EarningCategory extends Model
 {
-    /** @use HasFactory<\Database\Factories\EarningCategoryFactory> */
     use HasFactory;
 
     public function earnings()
