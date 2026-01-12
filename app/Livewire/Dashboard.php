@@ -26,6 +26,8 @@ class Dashboard extends Component
     public $editingEntryId = null;
     public $editingEntryType = null;
     public $shouldFocusDate = null;
+    public $showEarningModal = false;
+    public $showExpenseModal = false;
     public $earningForm = [
         'date'        => '',
         'amount'      => '',
@@ -76,7 +78,12 @@ class Dashboard extends Component
         $this->editingEntryType = $type;
         $this->shouldFocusDate  = $type;
 
-        $this->dispatch('scrollToBottom');
+        // Open appropriate modal
+        if ($type === 'Earning') {
+            $this->showEarningModal = true;
+        } else {
+            $this->showExpenseModal = true;
+        }
     }
 
     public function cancelAdd()
@@ -84,8 +91,8 @@ class Dashboard extends Component
         $this->resetForms();
 
         $this->editingEntryType = null;
-
-        $this->dispatch('scrollToTop');
+        $this->showEarningModal = false;
+        $this->showExpenseModal = false;
     }
 
     public function editEntry($id, $type)
@@ -105,6 +112,7 @@ class Dashboard extends Component
             ];
 
             $this->shouldFocusDate = 'earning';
+            $this->showEarningModal = true;
         } else {
             $expense = $this->repository->getExpenseById($id);
             $this->expenseForm = [
@@ -115,9 +123,8 @@ class Dashboard extends Component
             ];
 
             $this->shouldFocusDate = 'expense';
+            $this->showExpenseModal = true;
         }
-
-        $this->dispatch('scrollToBottom');
     }
 
     public function cancelEdit()
@@ -125,8 +132,8 @@ class Dashboard extends Component
         $this->editingEntryId = null;
         $this->editingEntryType = null;
         $this->resetForms();
-
-        $this->dispatch('scrollToTop');
+        $this->showEarningModal = false;
+        $this->showExpenseModal = false;
     }
 
     private function resetForms()
@@ -211,6 +218,7 @@ class Dashboard extends Component
         $this->refreshData();
         $this->gotoPage($currentPage);
         $this->reset('earningForm');
+        $this->showEarningModal = false;
 
         $this->dispatch('scrollToTop');
     }
@@ -232,6 +240,7 @@ class Dashboard extends Component
         $this->refreshData();
         $this->gotoPage($currentPage);
         $this->reset('expenseForm');
+        $this->showExpenseModal = false;
 
         $this->dispatch('scrollToTop');
     }
@@ -253,4 +262,3 @@ class Dashboard extends Component
         $this->resetForms();
     }
 }
-
