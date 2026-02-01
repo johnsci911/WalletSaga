@@ -78,7 +78,7 @@ class DashboardRepository
     {
         return Earning::create([
             'user_id'               => Auth::id(),
-            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d H:i:s'),
             'amount'                => $data['amount'],
             'earning_categories_id' => $data['category'] != '' ? $data['category'] : 1,
             'description'           => $data['description'],
@@ -115,7 +115,7 @@ class DashboardRepository
         $expense = Expense::findOrFail($id);
 
         $expense->update([
-            'date'                  => Carbon::parse($data['date'])->format('Y-m-d'),
+            'date'                  => Carbon::parse($data['date'])->format('Y-m-d H:i:s'),
             'amount'                => $data['amount'],
             'expense_categories_id' => $data['category'],
             'description'           => $data['description'],
