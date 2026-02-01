@@ -15,6 +15,7 @@ class Dashboard extends Component
 
     public $user;
     public $search = '';
+    public $perPage = 5;
     public $entries = [];
     public $currentPageBalance = 0;
     public $totalBalance = 0;
@@ -64,6 +65,12 @@ class Dashboard extends Component
     }
 
     public function updatedSearch()
+    {
+        $this->page = 1;
+        $this->refreshData();
+    }
+
+    public function updatedPerPage()
     {
         $this->page = 1;
         $this->refreshData();
@@ -183,7 +190,7 @@ class Dashboard extends Component
     public function getPaginatedEntries()
     {
         $entries = $this->getAllEntries();
-        return $this->repository->getPaginatedEntries($entries, $this->page);
+        return $this->repository->getPaginatedEntries($entries, $this->page, $this->perPage);
     }
 
     public function gotoPage($page)

@@ -175,6 +175,16 @@
                                             @endif
                                         @endif
                                     @endforeach
+                                    <select
+                                        wire:model.live="perPage"
+                                        class="w-28 py-2 px-3 ml-2 rounded-md bg-slate-700 text-slate-300 border border-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="5">5 per page</option>
+                                        <option value="10">10 per page</option>
+                                        <option value="25">25 per page</option>
+                                        <option value="50">50 per page</option>
+                                    </select>
+
                                 </div>
                             </div>
 
@@ -232,6 +242,15 @@
                                             </span>
                                         @endif
                                     @endforeach
+                                    <select
+                                        wire:model.live="perPage"
+                                        class="w-28 py-2 px-3 ml-2 rounded-md bg-slate-700 text-slate-300 border border-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="5">5 per page</option>
+                                        <option value="10">10 per page</option>
+                                        <option value="25">25 per page</option>
+                                        <option value="50">50 per page</option>
+                                    </select>
                                 </div>
                             </div>
                         </nav>
