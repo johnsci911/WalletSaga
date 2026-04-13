@@ -6,5 +6,6 @@
     </div>
     <h1 class="text-2xl font-bold text-center">Welcome to WalletSaga</h1>
 
-    <livewire:financial-trend />
+    <livewire:financial-trend-chart />
+    <livewire:yearly-financial-trend />
 </div>
