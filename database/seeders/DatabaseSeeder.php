@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name'     => 'John Karlo',
-            'email'    => 'johnkarlo.315@gmail.com',
+            'name' => 'John Karlo',
+            'email' => 'johnkarlo.315@gmail.com',
             'password' => 'password',
         ]);
 
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'Commission',
             'Dividend',
             'Interest',
-            'Other'
+            'Other',
         ];
 
         $expenseCategories = [
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'Personal Care',
             'Home Improvement',
             'Travel',
-            'Other'
+            'Other',
         ];
 
         // Create all categories upfront
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
 
         $dates = [];
         $startDate = now()->startOfDay();
-        for ($day = 0; $day < 30; $day++) {
+        for ($day = 0; $day < 90; $day++) {
             $entriesPerDay = rand(3, 5);
             for ($entry = 0; $entry < $entriesPerDay; $entry++) {
                 $dates[] = $startDate->copy()->subDays($day)->addSeconds(rand(0, 86399))->timestamp;
@@ -67,14 +67,14 @@ class DatabaseSeeder extends Seeder
         foreach ($dates as $date) {
             Earning::factory(3)->create([
                 'earning_categories_id' => $earningCategoryIds[array_rand($earningCategoryIds)],
-                'user_id'               => $user->id,
-                'date'                  => date('Y-m-d H:i:s', $date)
+                'user_id' => $user->id,
+                'date' => date('Y-m-d H:i:s', $date),
             ]);
 
             Expense::factory(1)->create([
                 'expense_categories_id' => $expenseCategoryIds[array_rand($expenseCategoryIds)],
-                'user_id'               => $user->id,
-                'date'                  => date('Y-m-d H:i:s', $date)
+                'user_id' => $user->id,
+                'date' => date('Y-m-d H:i:s', $date),
             ]);
         }
 

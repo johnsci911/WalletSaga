@@ -38,31 +38,29 @@ class YearlyFinancialTrend extends Component
 
     public function getMonthlyBalances()
     {
-        // Get data for the current year
         $startDate = now()->startOfYear();
         $endDate = now()->endOfYear();
 
         $earnings = $this->getEarningsInDateRange($startDate, $endDate);
         $expenses = $this->getExpensesInDateRange($startDate, $endDate);
 
-        // Find the last date with actual data
         $lastEarningDate = $earnings->max('date');
         $lastExpenseDate = $expenses->max('date');
 
-        // Use the most recent date between earnings and expenses, or today if no data exists
-        $lastDataDate = max($lastEarningDate, $lastExpenseDate);
+        $lastDataDate = max(
+            $lastEarningDate ? strtotime($lastEarningDate) : 0,
+            $lastExpenseDate ? strtotime($lastExpenseDate) : 0
+        );
 
         if ($lastDataDate) {
-            $endDate = min(Carbon::parse($lastDataDate), now()->endOfYear());
+            $endDate = min(Carbon::createFromTimestamp($lastDataDate), now()->endOfYear());
         } else {
-            // If no data exists, just show today
             $endDate = now();
         }
 
         $monthlyBalances = [];
         $cumulativeBalance = 0;
 
-        // Calculate the initial balance (all earnings and expenses before the start date)
         $initialEarnings = Earning::where('user_id', Auth::id())
             ->where('date', '<', $startDate)
             ->sum('amount');
@@ -71,19 +69,18 @@ class YearlyFinancialTrend extends Component
             ->sum('amount');
         $cumulativeBalance = $initialEarnings - $initialExpenses;
 
-        // Process each month
         for ($month = $startDate->copy(); $month <= $endDate; $month->addMonth()) {
             $currentMonth = $month->format('M Y');
 
-            $monthlyStartDate = $month->startOfMonth();
-            $monthlyEndDate = $month->endOfMonth();
+            $monthlyStartDate = $month->copy()->startOfMonth();
+            $monthlyEndDate = $month->copy()->endOfMonth();
 
-            $monthlyEarnings = $earnings->where('date', '>=', $monthlyStartDate->format('Y-m-d H:i:s'))
-                ->where('date', '<=', $monthlyEndDate->format('Y-m-d H:i:s'))
+            $monthlyEarnings = $earnings
+                ->filter(fn ($e) => Carbon::parse($e->date)->between($monthlyStartDate, $monthlyEndDate, true))
                 ->sum('amount');
 
-            $monthlyExpenses = $expenses->where('date', '>=', $monthlyStartDate->format('Y-m-d H:i:s'))
-                ->where('date', '<=', $monthlyEndDate->format('Y-m-d H:i:s'))
+            $monthlyExpenses = $expenses
+                ->filter(fn ($e) => Carbon::parse($e->date)->between($monthlyStartDate, $monthlyEndDate, true))
                 ->sum('amount');
 
             $cumulativeBalance += $monthlyEarnings - $monthlyExpenses;

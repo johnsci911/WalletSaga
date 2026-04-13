@@ -14,12 +14,6 @@
             </div>
 
             <div class="flex flex-col items-center min-w-full">
-                <!-- Financial Trend Chart -->
-                <livewire:financial-trend-chart />
-
-                <!-- Yearly Financial Trend Chart -->
-                <livewire:yearly-financial-trend />
-
                 <!-- Add search bar and transaction buttons -->
                 <div class="w-full gap-3 mb-4 flex flex-col md:flex-row items-center justify-center">
                     <input

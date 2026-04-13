@@ -34,27 +34,39 @@
                         {
                             label: 'Balance',
                             data: dailyBalances.map(item => item.balance),
-                            borderColor: '#3b82f6', // blue-500
+                            borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             borderWidth: 2,
+                            borderCapStyle: 'round',
+                            pointBorderCapStyle: 'round',
+                            pointBorderWidth: 2,
+                            pointRadius: 3,
                             fill: true,
                             tension: 0.3
                         },
                         {
                             label: 'Earnings',
                             data: dailyBalances.map(item => item.earnings),
-                            borderColor: '#10b981', // emerald-500
+                            borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             borderWidth: 2,
+                            borderCapStyle: 'round',
+                            pointBorderCapStyle: 'round',
+                            pointBorderWidth: 2,
+                            pointRadius: 3,
                             fill: false,
                             borderDash: [5, 5]
                         },
                         {
                             label: 'Expenses',
                             data: dailyBalances.map(item => item.expenses),
-                            borderColor: '#ef4444', // red-500
+                            borderColor: '#ef4444',
                             backgroundColor: 'rgba(239, 68, 68, 0.1)',
                             borderWidth: 2,
+                            borderCapStyle: 'round',
+                            pointBorderCapStyle: 'round',
+                            pointBorderWidth: 2,
+                            pointRadius: 3,
                             fill: false,
                             borderDash: [5, 5]
                         }
