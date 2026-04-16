@@ -38,7 +38,7 @@ class YearlyFinancialTrend extends Component
 
     public function getWeeklyBalances()
     {
-        $startDate = now()->startOfYear()->startOfWeek(Carbon::MONDAY);
+        $startDate = now()->startOfYear()->startOfWeek(Carbon::SUNDAY);
         $endDate = now()->endOfYear();
 
         $earnings = $this->getEarningsInDateRange(now()->startOfYear(), $endDate);
