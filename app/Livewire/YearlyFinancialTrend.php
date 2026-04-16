@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class YearlyFinancialTrend extends Component
 {
-    public $monthlyBalances;
+    public $weeklyBalances;
 
     public function render()
     {
@@ -19,7 +19,7 @@ class YearlyFinancialTrend extends Component
 
     public function mount()
     {
-        $this->monthlyBalances = $this->getMonthlyBalances();
+        $this->weeklyBalances = $this->getWeeklyBalances();
     }
 
     public function getEarningsInDateRange($startDate, $endDate)
@@ -36,13 +36,13 @@ class YearlyFinancialTrend extends Component
             ->get();
     }
 
-    public function getMonthlyBalances()
+    public function getWeeklyBalances()
     {
-        $startDate = now()->startOfYear();
+        $startDate = now()->startOfYear()->startOfWeek(Carbon::MONDAY);
         $endDate = now()->endOfYear();
 
-        $earnings = $this->getEarningsInDateRange($startDate, $endDate);
-        $expenses = $this->getExpensesInDateRange($startDate, $endDate);
+        $earnings = $this->getEarningsInDateRange(now()->startOfYear(), $endDate);
+        $expenses = $this->getExpensesInDateRange(now()->startOfYear(), $endDate);
 
         $lastEarningDate = $earnings->max('date');
         $lastExpenseDate = $expenses->max('date');
@@ -58,41 +58,42 @@ class YearlyFinancialTrend extends Component
             $endDate = now();
         }
 
-        $monthlyBalances = [];
+        $weeklyBalances = [];
         $cumulativeBalance = 0;
 
         $initialEarnings = Earning::where('user_id', Auth::id())
-            ->where('date', '<', $startDate)
+            ->where('date', '<', now()->startOfYear())
             ->sum('amount');
         $initialExpenses = Expense::where('user_id', Auth::id())
-            ->where('date', '<', $startDate)
+            ->where('date', '<', now()->startOfYear())
             ->sum('amount');
         $cumulativeBalance = $initialEarnings - $initialExpenses;
 
-        for ($month = $startDate->copy(); $month <= $endDate; $month->addMonth()) {
-            $currentMonth = $month->format('M Y');
+        for ($week = $startDate->copy(); $week <= $endDate; $week->addWeek()) {
+            $weekStart = $week->copy()->startOfDay();
+            $weekEnd = $week->copy()->addDays(6)->endOfDay();
 
-            $monthlyStartDate = $month->copy()->startOfMonth();
-            $monthlyEndDate = $month->copy()->endOfMonth();
+            $weekLabel = $weekStart->format('M d');
 
-            $monthlyEarnings = $earnings
-                ->filter(fn ($e) => Carbon::parse($e->date)->between($monthlyStartDate, $monthlyEndDate, true))
+            $weeklyEarnings = $earnings
+                ->filter(fn ($e) => Carbon::parse($e->date)->between($weekStart, $weekEnd))
                 ->sum('amount');
 
-            $monthlyExpenses = $expenses
-                ->filter(fn ($e) => Carbon::parse($e->date)->between($monthlyStartDate, $monthlyEndDate, true))
+            $weeklyExpenses = $expenses
+                ->filter(fn ($e) => Carbon::parse($e->date)->between($weekStart, $weekEnd))
                 ->sum('amount');
 
-            $cumulativeBalance += $monthlyEarnings - $monthlyExpenses;
+            $cumulativeBalance += $weeklyEarnings - $weeklyExpenses;
 
-            $monthlyBalances[] = [
-                'month' => $currentMonth,
-                'earnings' => $monthlyEarnings,
-                'expenses' => $monthlyExpenses,
+            $weeklyBalances[] = [
+                'week' => $weekLabel,
+                'weekStart' => $weekStart->format('Y-m-d'),
+                'earnings' => $weeklyEarnings,
+                'expenses' => $weeklyExpenses,
                 'balance' => $cumulativeBalance,
             ];
         }
 
-        return $monthlyBalances;
+        return $weeklyBalances;
     }
 }
